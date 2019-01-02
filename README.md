@@ -11,4 +11,4 @@
 
 * Run ```Setup.py <db> (--user=USER) (--passwd=PASSWORD) (--src=IMAGES_FOLDER_PATH) [--host=HOST] [--port=PORT]```
 
-```dataset``` contains sample images you can pass ```--src dataset```
+* ```dataset``` folder contains sample images and can used for testing: ```--src dataset```
