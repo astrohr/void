@@ -18,6 +18,18 @@ def findFits(search_dir):
 
 	return fits_fnames_arr
 
+def checkForFlag(fits_fname):
+
+	with fits.open(fits_fname) as hdul:
+
+		header_dict = hdul[0].header
+
+		if 'VISNJAN' in header_dict and header_dict['VISNJAN'].strip() == 'True':
+			return True
+
+	print(fits_fname)
+	return False
+
 
 def timeStr2Object(time_str):
 
@@ -31,16 +43,12 @@ def timeStr2Object(time_str):
 
 def getFitsTime(fits_fname):
 
-	hdul = fits.open(fits_fname)
-
-	time_str = hdul[0].header['DATE-OBS']
-
-	time = timeStr2Object(time_str)
-
-	hdul.close()
+	with fits.open(fits_fname) as hdul:
+		
+		time_str = hdul[0].header['DATE-OBS']
+		time = timeStr2Object(time_str)
 
 	return time
-
 
 def getFitsRange(range_str, search_dir):
 
