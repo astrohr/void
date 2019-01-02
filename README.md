@@ -1,5 +1,6 @@
 # Setup
-* Run ```setup/install_requirements.sh```
+* ```cd``` into ```setup``` folder
+* Run ```bash install_requirements.sh``` and press [ENTER] to continue
 
 * Execute the following commands:
     1. ```sudo -i -u postgres```
