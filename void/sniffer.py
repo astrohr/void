@@ -102,7 +102,7 @@ class Sniffer:
     def validate_file(self, fname):
         if not fname.endswith('.fits') and not fname.endswith('.fit'):
             return False
-        if self.flag_name and self.check_flag(fname):
+        if self.flag_name and not self.check_flag(fname):
             return False
         if not self.filter_fits(fname):
             return False
