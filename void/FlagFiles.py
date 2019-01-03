@@ -5,6 +5,9 @@
 
 from docopt import docopt
 from astropy.io import fits
+import logging
+
+log = logging.getLogger(__name__)
 
 import Sniffer as snf
 
@@ -15,10 +18,9 @@ if __name__ == '__main__':
 
 	fits_files = snf.findFits(flag_dir)
 
-	print('Overwriting headers...')
 	for fname_i in fits_files:
 
-		print('Overwriting: ', fname_i)
+		log.info('Overwriting: ', fname_i)
 
 		fits_absname = snf.absName(flag_dir, fname_i)
 
@@ -26,6 +28,4 @@ if __name__ == '__main__':
 
 		header['VISNJAN'] = 'True'
 
-		fits.writeto(fits_absname, data, header, ovrewrite=True)
-
-	print('Done!')
+		fits.writeto(fits_absname, data, header, overwrite=True)
