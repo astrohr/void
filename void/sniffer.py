@@ -29,12 +29,9 @@ import docopt
 from astropy.time import Time
 from astropy.io import fits
 
+import common
 
 log = logging.getLogger(__name__)
-
-
-LOG_FORMAT = (
-    '%(levelname)-8s  %(asctime)s  %(process)-5d  %(name)-26s  %(message)s')
 
 
 class Sniffer:
@@ -139,24 +136,11 @@ class Sniffer:
         return True
 
 
-# TODO move to common?
-def _configure_log(verbosity):
-    levels = {
-        '0': logging.CRITICAL,
-        '1': logging.ERROR,
-        '2': logging.WARNING,
-        '3': logging.INFO,
-        '4': logging.DEBUG,
-    }
-    if verbosity not in levels.keys():
-        raise docopt.DocoptExit(f'--verbosity not one of 0, 1, 2, 3, 4')
-    logging.basicConfig(level=levels[verbosity], format=LOG_FORMAT)
-
 
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
-    _configure_log(arguments['--verbosity'])
+    common._configure_log(arguments['--verbosity'])
     log.debug('initialising')
     sniffer = Sniffer(
         search_dir=arguments['SEARCH_DIR'],
