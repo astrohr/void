@@ -19,6 +19,7 @@ Options:
   -h --help         Show this help screen
   -v --version      Show program name and version number
 """
+# TODO versioning individual scripts?
 
 import logging
 import os
@@ -44,7 +45,7 @@ class Sniffer:
             search_dir: str,
             maxn: int,
             range_str: str,
-            flag_name: str,):
+            flag_name: str):
         self.search_dir = search_dir
         self.maxn = maxn
         self.range_str = range_str
@@ -57,6 +58,7 @@ class Sniffer:
         self._filter_method = self._filter_always_true
         if self.range_str:
             if ',' in self.range_str:
+                # TODO partial?
                 before_comma, after_comma = self.range_str.split(',')
                 self.time_first = self.parse_time(before_comma[1:])
                 self.time_last = self.parse_time(after_comma[1:-1])
@@ -136,7 +138,7 @@ class Sniffer:
         log.debug(f'_filter_always_true {time_fits}')
         return True
 
-
+# TODO move to common?
 def _configure_log(verbosity):
     levels = {
         '0': logging.CRITICAL,
