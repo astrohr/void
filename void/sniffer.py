@@ -138,6 +138,7 @@ class Sniffer:
         log.debug(f'_filter_always_true {time_fits}')
         return True
 
+
 # TODO move to common?
 def _configure_log(verbosity):
     levels = {
