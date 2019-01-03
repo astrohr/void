@@ -2,6 +2,7 @@
 
 
 ![v0.0.1](https://img.shields.io/badge/version-0.0.1-blue.svg)
+[![CircleCI](https://circleci.com/gh/astrohr/void.svg?style=shield)](https://circleci.com/gh/astrohr/void)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9070bd712544239ac5b43f3f5e58ba9)](https://app.codacy.com/app/astrohr/void?utm_source=github.com&utm_medium=referral&utm_content=astrohr/void&utm_campaign=Badge_Grade_Dashboard)
 
 
@@ -69,6 +70,7 @@ cd void_project
 pyenv local void
 ```
 
+### source code
 
 If you just wish to use void, download and install the release package:
 ```bash
@@ -82,7 +84,7 @@ For development, checkout the repo instead:
 
 ```bash
 git clone git@github.com:frnhr/void.git .
-pip install -e .
+pip install -e .[dev]
 ```
 
 ## Usage
