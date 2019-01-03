@@ -32,7 +32,7 @@ def findFits(search_dir, maxn=None, check=None):
 
 	log.info('Finding all FITS files...')
 
-	for root, dirs, files in os.walk(search_dir):
+	for files in os.walk(search_dir)[2]:
 		for file in files:
 			if file.endswith('.fits') or file.endswith('.fit'):
 				abs_fname = absName(search_dir, file)
@@ -63,6 +63,7 @@ def getFitsTime(fits_fname):
 	with fits.open(fits_fname) as hdul:
 		
 		time_str = hdul[0].header['DATE-OBS']
+		
 		time = timeStr2Object(time_str)
 
 	return time
