@@ -41,7 +41,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            bin/lint void/sniffer.py
+            bin/lint
             python -m void.tests
 
       - store_artifacts:
