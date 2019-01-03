@@ -4,6 +4,9 @@ import os
 from docopt import docopt
 from astropy.time import Time
 from astropy.io import fits
+import logging
+
+log = logging.getLogger(__name__)
 
 def absName(search_dir, file):
 
@@ -26,6 +29,8 @@ def checkForFlag(fits_fname):
 def findFits(search_dir, maxn=None, check=None):
 
 	fits_fnames_arr = []
+
+	log.info('Finding all FITS files...')
 
 	for root, dirs, files in os.walk(search_dir):
 		for file in files:
@@ -66,6 +71,8 @@ def getFitsRange(search_dir, range_str, maxn=None, check=None):
 
 	fits_fnames = findFits(search_dir, check=check)
 	filtered_fits_fnames = []
+
+	log.info('Finding all FITS files within the given time range...')
 
 	# Check if the string is a range or something else
 	if ',' in range_str:
