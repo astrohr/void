@@ -5,7 +5,7 @@ void_reducer 0.1
 Prints header data from a FITS file and optionally marks it as 'reduced'. 
 
 Usage: 
-  void_reducer FITS_FNAME [--mark]
+  void_reducer FITS_FNAME [--mark] [--verbosity=V]
   void_reducer -v | --version
   void_reducer -h | --help
 
@@ -13,6 +13,7 @@ Options:
   -m --mark     Mark the file as reduced
   -h --help     Show this help screen
   -v --version  Show program name and version number
+  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
 """
 
 import sys
