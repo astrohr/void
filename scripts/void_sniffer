@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+from void.sniffer import main
+
+
+main()
