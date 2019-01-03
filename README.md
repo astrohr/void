@@ -1,4 +1,7 @@
 # Setup
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9070bd712544239ac5b43f3f5e58ba9)](https://app.codacy.com/app/astrohr/void?utm_source=github.com&utm_medium=referral&utm_content=astrohr/void&utm_campaign=Badge_Grade_Dashboard)
+
 * ```cd``` into ```setup``` folder
 * Run ```bash install_requirements.sh``` and press [ENTER] to continue
 
