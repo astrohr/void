@@ -1,21 +1,39 @@
-""" Usage: Reducer.py (FITS_FNAME) [--mark] """
+#!/usr/bin/env/ python
+""" 
+void_reducer 0.1
+
+Prints header data from a FITS file and optionally marks it as 'reduced'. 
+
+Usage: 
+  void_reducer FITS_FNAME [--mark]
+  void_reducer -v | --version
+  void_reducer -h | --help
+
+Options:
+  -m --mark     Mark the file as reduced
+  -h --help     Show this help screen
+  -v --version  Show program name and version number
+"""
 
 import sys
-from docopt import docopt
+import docopt
 from astropy.io import fits
 import logging
 import json
 
+import void.common as common
 import void.config as config
 
 log = logging.getLogger(__name__)
 
 
 
-def printHeaderData(fits_fname):
+def print_header_data(fits_fname):
     """ 
     Prints header data from a certain FITS file as a JSON dictionary. 
     """
+
+    log.debug('printing data for %s', fits_fname)
 
     with fits.open(fits_fname) as hdul:
 
@@ -35,8 +53,8 @@ def printHeaderData(fits_fname):
         x_scale = config.SCALE_X_BIN1
         y_scale = config.SCALE_Y_BIN1
 
-        x_ang_size = x_pix_size * x_binning * x_scale
-        y_ang_size = y_pix_size * y_binning * y_scale
+        x_deg_size = float(x_pix_size * x_binning * x_scale) / 3600
+        y_deg_size = float(y_pix_size * y_binning * y_scale) / 3600
 
         return_dict = {
             'date-obs': date_obs, 
@@ -44,35 +62,33 @@ def printHeaderData(fits_fname):
             'focus': focus,
             'ra-center': ra_center, 
             'dec_center': dec_center,
-            'x_ang_size': x_ang_size,
-            'y_ang_size': y_ang_size
+            'x_deg_size': x_deg_size,
+            'y_deg_size': y_deg_size
         }
 
         json_dict = json.dumps(return_dict)
-
         sys.stdout.write(f'{json_dict}\n')
 
+def mark_reduced(fits_fname):
 
-def markReduced(fits_fname):
-
-    log.info('Reducing: ', fits_fname)
-
+    log.debug('reducing %s', fits_fname)
     data, header = fits.getdata(fits_fname, header=True)
-
     header['REDUCED'] = 'True'
-
     fits.writeto(fits_fname, data, header, overwrite=True)
 
-
-
-if __name__ == '__main__':
-
-    arguments = docopt(__doc__)
+def main():
+    name_and_version = __doc__.strip().splitlines()[0]
+    arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
+    common._configure_log(arguments['--verbosity'])
+    log.debug('initialising')
 
     fits_fname = arguments['FITS_FNAME']
     mark = arguments['--mark']
 
-    printHeaderData(fits_fname)
-
+    print_header_data(fits_fname)
     if mark: 
-        markReduced(fits_fname)
+        mark_reduced(fits_fname)
+
+
+if __name__ == '__main__':
+    main()

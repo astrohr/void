@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 """
-void-sniffer 0.2
+void_sniffer 0.2
 
 Searches for FITS files without a custom header and outputs their paths.
 
 Usage:
-  void-sniffer SEARCH_DIR [--tmin=TIME_MIN] [--tmax=TIME_MAX] \
+  void_sniffer SEARCH_DIR [--tmin=TIME_MIN] [--tmax=TIME_MAX] \
 [--maxn=N] [--flag=HEADER | --noflag] [--verbosity=V]
-  void-sniffer -v | --version
-  void-sniffer -h | --help
+  void_sniffer -v | --version
+  void_sniffer -h | --help
 
 Options:
   -i --tmin=TIME_MIN  Low time threshold
