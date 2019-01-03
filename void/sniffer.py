@@ -5,19 +5,20 @@ void-sniffer 0.2
 Searches for FITS files without a custom header and outputs their paths.
 
 Usage:
-  void-sniffer SEARCH_DIR [--time=SEARCH] [--maxn=N] \
-[--flag=HEADER | --noflag] [--verbosity=V]
+  void-sniffer SEARCH_DIR [--tmin=TIME_MIN] [--tmax=TIME_MAX] \
+[--maxn=N] [--flag=HEADER | --noflag] [--verbosity=V]
   void-sniffer -v | --version
   void-sniffer -h | --help
 
 Options:
-  -t --time=SEARCH  Search string???
-  -n --maxn=N       Stop after outputing N images
-  -f --flag=HEADER  Name of the header to look for, [default: VISNJAN]
-  -n --noflag       Skip header flag check
-  -V --verbosity=V  Logging verbosity, 0 to 4 [default: 2]
-  -h --help         Show this help screen
-  -v --version      Show program name and version number
+  -i --tmin=TIME_MIN  Low time threshold
+  -a --tmax=TIME_MAX  High time threshold
+  -n --maxn=N         Stop after outputing N images
+  -f --flag=HEADER    Name of the header to look for, [default: VISNJAN]
+  -n --noflag         Skip header flag check
+  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
+  -h --help           Show this help screen
+  -v --version        Show program name and version number
 """
 # TODO versioning individual scripts?
 
@@ -29,7 +30,7 @@ import docopt
 from astropy.time import Time
 from astropy.io import fits
 
-import common
+import void.common as common
 
 log = logging.getLogger(__name__)
 
@@ -41,11 +42,13 @@ class Sniffer:
             self,
             search_dir: str,
             maxn: int,
-            range_str: str,
+            tmin: str,
+            tmax: str,
             flag_name: str):
         self.search_dir = search_dir
         self.maxn = maxn
-        self.range_str = range_str
+        self.tmin = tmin
+        self.tmax = tmax
         if flag_name == self.DISABLED_FLAG:
             self.flag_name = None
         else:
@@ -53,19 +56,16 @@ class Sniffer:
         self.count = 0
 
         self._filter_method = self._filter_always_true
-        if self.range_str:
-            if ',' in self.range_str:
-                # TODO partial?
-                before_comma, after_comma = self.range_str.split(',')
-                self.time_first = self.parse_time(before_comma[1:])
-                self.time_last = self.parse_time(after_comma[1:-1])
-                self._filter_method = self._filter_within
-            elif self.range_str.startswith('>'):
-                self.time_thresh = self.parse_time(self.range_str[1:])
-                self._filter_method = self._filter_after
-            elif self.range_str.startswith('<'):
-                self.time_thresh = self.parse_time(self.range_str[1:])
-                self._filter_method = self._filter_before
+        if self.tmin and self.tmax:
+            self.time_first = self.parse_time(self.tmin)
+            self.time_last = self.parse_time(self.tmax)
+            self._filter_method = self._filter_within
+        elif self.tmin:
+            self.time_thresh = self.parse_time(self.tmin)
+            self._filter_method = self._filter_after
+        elif self.tmax:
+            self.time_thresh = self.parse_time(self.tmax)
+            self._filter_method = self._filter_before
         log.debug('init done')
 
     def check_flag(self, fits_fname):
@@ -144,7 +144,8 @@ def main():
     log.debug('initialising')
     sniffer = Sniffer(
         search_dir=arguments['SEARCH_DIR'],
-        range_str=arguments['--time'],
+        tmin=arguments['--tmin'],
+        tmax=arguments['--tmax'],
         maxn=arguments['--maxn'],
         flag_name=arguments['--flag'],
     )
