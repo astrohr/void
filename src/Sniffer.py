@@ -1,22 +1,14 @@
-""" Usage: sniffer.py (SEARCH_DIR) [--newer_than=TIMESTAMP] [--max_batch_size=MAXN]
-"""
+""" Usage: Sniffer.py (SEARCH_DIR) [--time=SEARCH_STRING] [--maxn=MAXN] [--check] """
 
 import os
 from docopt import docopt
 from astropy.time import Time
 from astropy.io import fits
 
-def findFits(search_dir):
+def absName(search_dir, file):
 
-	fits_fnames_arr = []
+	return os.path.abspath(os.path.join(search_dir, file))
 
-	for root, dirs, files in os.walk(search_dir):
-		for file in files:
-			if file.endswith('.fits') or file.endswith('.fit'):
-				abs_fname = os.path.abspath(os.path.join(search_dir, file))
-				fits_fnames_arr.append(abs_fname)
-
-	return fits_fnames_arr
 
 def checkForFlag(fits_fname):
 
@@ -29,6 +21,26 @@ def checkForFlag(fits_fname):
 
 	print(fits_fname)
 	return False
+
+
+def findFits(search_dir, maxn=None, check=None):
+
+	fits_fnames_arr = []
+
+	for root, dirs, files in os.walk(search_dir):
+		for file in files:
+			if file.endswith('.fits') or file.endswith('.fit'):
+				abs_fname = absName(search_dir, file)
+				if check is not None:
+					if checkForFlag(abs_fname) == True:
+						fits_fnames_arr.append(abs_fname)
+
+	fits_fnames_arr = sorted(fits_fnames_arr)
+
+	if maxn is not None:
+		fits_fnames_arr = fits_fnames_arr[:int(maxn)]
+
+	return fits_fnames_arr
 
 
 def timeStr2Object(time_str):
@@ -50,9 +62,9 @@ def getFitsTime(fits_fname):
 
 	return time
 
-def getFitsRange(range_str, search_dir):
+def getFitsRange(search_dir, range_str, maxn=None, check=None):
 
-	fits_fnames = findFits(search_dir)
+	fits_fnames = findFits(search_dir, check=check)
 	filtered_fits_fnames = []
 
 	# Check if the string is a range or something else
@@ -84,6 +96,11 @@ def getFitsRange(range_str, search_dir):
 				if time_fits < time_thresh:
 					filtered_fits_fnames.append(fname_i)
 
+	filtered_fits_fnames = sorted(filtered_fits_fnames)
+
+	if maxn is not None:
+		filtered_fits_fnames = filtered_fits_fnames[:int(maxn)]
+
 	return filtered_fits_fnames
 
 
@@ -91,14 +108,19 @@ if __name__ == '__main__':
 
 	arguments = docopt(__doc__)
 
-	print(arguments)
-
 	search_dir = arguments['SEARCH_DIR']
-	timestamp = arguments['--newer_than']
-	maxn = arguments['--max_batch_size']
+	search_string = arguments['--time']
+	maxn = arguments['--maxn']
+	check = arguments['--check']
 
-	fits_fnames = findFits(search_dir)
+	if search_string is None:
+
+		fits_fnames = findFits(search_dir, maxn=maxn, check=check)
+
+	else:
+
+		fits_fnames = getFitsRange(search_dir, search_string, maxn=maxn, check=check)
+
 
 	for fname_i in fits_fnames:
-
-		print(fname_i, getFitsTime(fname_i))
+		print(fname_i)
