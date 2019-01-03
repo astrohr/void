@@ -26,6 +26,6 @@ if __name__ == '__main__':
 
 		header['VISNJAN'] = 'True'
 
-		fits.writeto(fits_absname, data, header, ovrewrite=True)
+		fits.writeto(fits_absname, data, header, overwrite=True)
 
 	print('Done!')
