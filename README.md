@@ -82,7 +82,7 @@ For development, checkout the repo instead:
 
 ```bash
 git clone git@github.com:frnhr/void.git .
-pip install -e .
+pip install -e .[dev]
 ```
 
 ## Usage
