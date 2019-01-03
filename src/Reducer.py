@@ -2,10 +2,15 @@
 
 from docopt import docopt
 from astropy.io import fits
+import logging
+
+log = logging.getLogger(__name__)
 
 def printHeaderData(fits_fname):
 
 	with fits.open(fits_fname) as hdul:
+
+		log.info('Printing header data for: ', fits_fname)
 
 		header_dict = hdul[0].header
 
@@ -23,6 +28,8 @@ def printHeaderData(fits_fname):
 
 
 def markReduced(fits_fname):
+
+	log.info('Reducing: ', fits_fname)
 
 	data, header = fits.getdata(fits_fname, header=True)
 
