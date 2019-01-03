@@ -42,6 +42,7 @@ jobs:
           command: |
             . venv/bin/activate
             bin/lint
+            python -m void.tests
 
       - store_artifacts:
           path: test-reports
