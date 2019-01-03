@@ -96,6 +96,11 @@ class Sniffer:
             time_str = hdul[0].header['DATE-OBS']
             return self.parse_time(time_str)
 
+    def flag_file(self, fits_fname):
+        data, header = fits.getdata(fits_fname, header=True)
+        header['VISNJAN'] = 'True'
+        fits.writeto(fits_fname, data, header, overwrite=True)
+
     def validate_file(self, fname):
         if not fname.endswith('.fits') and not fname.endswith('.fit'):
             return False
@@ -106,7 +111,7 @@ class Sniffer:
         if self.maxn is not None and self.count >= self.maxn:
             raise StopIteration
         self.count += 1
-        # TODO self.flag_file(file)
+        self.flag_file(fname)
         return True
 
     def filter_fits(self, fname_i):
