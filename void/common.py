@@ -3,10 +3,9 @@
 Functions used in misc files.
 """
 
-
 import logging
-import docopt
 
+import docopt
 
 LOG_FORMAT = (
     '%(levelname)-8s  %(asctime)s  %(process)-5d  %(name)-26s  %(message)s')
