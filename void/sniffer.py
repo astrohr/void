@@ -30,7 +30,7 @@ import docopt
 from astropy.time import Time
 from astropy.io import fits
 
-import void.common as common
+from void import common
 
 log = logging.getLogger(__name__)
 
@@ -145,7 +145,7 @@ class Sniffer:
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
-    common._configure_log(arguments['--verbosity'])
+    common.configure_log(arguments['--verbosity'])
     log.debug('initialising')
     sniffer = Sniffer(
         search_dir=arguments['SEARCH_DIR'],
