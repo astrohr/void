@@ -3,7 +3,7 @@
 
 ![v0.0.1](https://img.shields.io/badge/version-0.0.1-blue.svg)
 [![CircleCI](https://circleci.com/gh/astrohr/void.svg?style=shield)](https://circleci.com/gh/astrohr/void)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9070bd712544239ac5b43f3f5e58ba9)](https://app.codacy.com/app/astrohr/void?utm_source=github.com&utm_medium=referral&utm_content=astrohr/void&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8a3cfe48e7104832bb5170751f720718)](https://www.codacy.com/app/astrohr/void?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=astrohr/void&amp;utm_campaign=Badge_Grade)
 
 
 ## Setup
