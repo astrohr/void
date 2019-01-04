@@ -27,7 +27,6 @@ from void import common, config
 log = logging.getLogger(__name__)
 
 
-
 def print_header_data(fits_fname):
     """
     Prints header data from a certain FITS file as a JSON dictionary.
@@ -35,7 +34,6 @@ def print_header_data(fits_fname):
     log.debug('printing data for %s', fits_fname)
 
     with fits.open(fits_fname) as hdul:
-
         header_dict = hdul[0].header
 
         date_obs = header_dict['DATE-OBS']
@@ -68,11 +66,13 @@ def print_header_data(fits_fname):
         json_dict = json.dumps(return_dict)
         sys.stdout.write(f'{json_dict}\n')
 
+
 def mark_reduced(fits_fname):
     log.debug('reducing %s', fits_fname)
     data, header = fits.getdata(fits_fname, header=True)
     header['REDUCED'] = 'True'
     fits.writeto(fits_fname, data, header, overwrite=True)
+
 
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
@@ -84,7 +84,7 @@ def main():
     mark = arguments['--mark']
 
     print_header_data(fits_fname)
-    if mark: 
+    if mark:
         mark_reduced(fits_fname)
 
 

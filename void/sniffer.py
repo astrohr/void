@@ -141,7 +141,6 @@ class Sniffer:
         return True
 
 
-
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
