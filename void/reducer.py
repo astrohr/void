@@ -16,11 +16,12 @@ Options:
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
 """
 
+import json
+import logging
 import sys
+
 import docopt
 from astropy.io import fits
-import logging
-import json
 
 from void import common, config
 
