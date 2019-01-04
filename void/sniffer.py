@@ -98,7 +98,7 @@ class Sniffer:
 
     def flag_file(self, fits_fname):
         data, header = fits.getdata(fits_fname, header=True)
-        header['VISNJAN'] = 'True'
+        header[self.flag_name] = 'True'
         fits.writeto(fits_fname, data, header, overwrite=True)
 
     def validate_file(self, fname):
