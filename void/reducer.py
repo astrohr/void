@@ -58,10 +58,10 @@ def print_header_data(fits_fname):
         y_deg_size = float(y_pix_size * y_binning * y_scale) / 3600
 
         return_dict = {
-            'date-obs': date_obs, 
+            'date_obs': date_obs, 
             'exposition': exp, 
             'focus': focus,
-            'ra-center': ra_center, 
+            'ra_center': ra_center, 
             'dec_center': dec_center,
             'x_deg_size': x_deg_size,
             'y_deg_size': y_deg_size
