@@ -54,6 +54,8 @@ class Sniffer:
         else:
             self.flag_name = flag_name
         self.count = 0
+        self.time_first = None
+        self.time_last = None
 
         if self.tmin:
             self.time_first = self.parse_time(self.tmin)
