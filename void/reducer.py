@@ -2,7 +2,7 @@
 """
 void_reducer 0.1
 
-Prints header data from a FITS filenames taken from stdin and optionally mark them.
+Prints header data from a FITS filenames from stdin and optionally mark them.
 
 Usage:
   void_reducer [--mark=MARK] [--verbosity=V]
