@@ -27,8 +27,8 @@ import os
 import sys
 
 import docopt
-from astropy.time import Time
 from astropy.io import fits
+from astropy.time import Time
 
 from void import common
 
