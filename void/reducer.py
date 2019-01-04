@@ -10,9 +10,9 @@ Usage:
   void_reducer -h | --help
 
 Options:
-  -m --mark     Mark the file as reduced
-  -h --help     Show this help screen
-  -v --version  Show program name and version number
+  -m --mark           Mark the file as reduced
+  -h --help           Show this help screen
+  -v --version        Show program name and version number
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
 """
 
