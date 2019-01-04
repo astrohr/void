@@ -2,15 +2,15 @@
 """
 void_reducer 0.1
 
-Prints header data from a FITS file and optionally marks it as 'reduced'.
+Prints header data from a FITS filenames taken from stdin and optionally mark them.
 
 Usage:
-  void_reducer FITS_FNAME [--mark] [--verbosity=V]
+  void_reducer [--mark=MARK] [--verbosity=V]
   void_reducer -v | --version
   void_reducer -h | --help
 
 Options:
-  -m --mark           Mark the file as reduced
+  -m --mark=MARK      Mark the file
   -h --help           Show this help screen
   -v --version        Show program name and version number
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
@@ -23,7 +23,7 @@ import sys
 import docopt
 from astropy.io import fits
 
-from void import common, config
+from void import common, config, sniffer
 
 log = logging.getLogger(__name__)
 
@@ -68,25 +68,23 @@ def print_header_data(fits_fname):
         sys.stdout.write(f'{json_dict}\n')
 
 
-def mark_reduced(fits_fname):
-    log.debug('reducing %s', fits_fname)
-    data, header = fits.getdata(fits_fname, header=True)
-    header['REDUCED'] = 'True'
-    fits.writeto(fits_fname, data, header, overwrite=True)
-
-
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
     common.configure_log(arguments['--verbosity'])
     log.debug('initialising')
 
-    fits_fname = arguments['FITS_FNAME']
     mark = arguments['--mark']
 
-    print_header_data(fits_fname)
-    if mark:
-        mark_reduced(fits_fname)
+    fnames_arr = []
+
+    for line in sys.stdin:
+        fnames_arr.append(line.strip())
+
+    for fname in fnames_arr:
+        print_header_data(fname)
+        if mark:
+            sniffer.Sniffer.flag_file(mark, fname)
 
 
 if __name__ == '__main__':
