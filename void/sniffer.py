@@ -55,17 +55,10 @@ class Sniffer:
             self.flag_name = flag_name
         self.count = 0
 
-        self._filter_method = self._filter_always_true
-        if self.tmin and self.tmax:
+        if self.tmin:
             self.time_first = self.parse_time(self.tmin)
+        if self.tmax:
             self.time_last = self.parse_time(self.tmax)
-            self._filter_method = self._filter_within
-        elif self.tmin:
-            self.time_thresh = self.parse_time(self.tmin)
-            self._filter_method = self._filter_after
-        elif self.tmax:
-            self.time_thresh = self.parse_time(self.tmax)
-            self._filter_method = self._filter_before
         log.debug('init done')
 
     def check_flag(self, fits_fname):
@@ -120,26 +113,14 @@ class Sniffer:
         Check if the string is a range or something else
         """
         time_fits = self.get_fits_time(fname_i)
-        filter_value = self._filter_method(time_fits)
+        if self.time_first and time_fits < self.time_first:
+            filter_value = False
+        elif self.time_last and time_fits > self.time_last:
+            filter_value = False
+        else:
+            filter_value = True
         log.debug(f'filter_value: {filter_value}')
         return filter_value
-
-    def _filter_within(self, time_fits):
-        log.debug('_filter_within %s', time_fits)
-        return self.time_first < time_fits < self.time_last
-
-    def _filter_before(self, time_fits):
-        log.debug(f'_filter_before {time_fits}')
-        return time_fits < self.time_thresh
-
-    def _filter_after(self, time_fits):
-        log.debug(f'_filter_after {time_fits}')
-        return time_fits > self.time_thresh
-
-    @staticmethod
-    def _filter_always_true(time_fits):
-        log.debug(f'_filter_always_true {time_fits}')
-        return True
 
 
 def main():
