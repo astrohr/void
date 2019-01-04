@@ -1,4 +1,32 @@
 #!/usr/bin/env python
+""" 
+void_selector 0.1
+
+Finds images in a given directory which contain a given point or polygon.
+
+Usage:
+  void_selector SEARCH_DIR [--point=POINT | --poly_pts=POLY_PTS] \
+[--verbosity=V]
+  void_selector -v | --version
+  void_selector -h | --help
+
+Options:
+  -p --point          Point which is checked
+  -l --poly_pts       List containing the polygon points which are checked
+  -v --version        Show program name and version number
+  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
+"""
+
+import sys
+import docopt
+import logging
+from ast import literal_eval
+
+import void.common as common
+import void.sniffer as sniffer
+import void.reducer as reducer
+
+log = logging.getLogger(__name__)
 
 def point_within_area(point, area_ll, area_ur):
     ra_p, dec_p = point
@@ -13,4 +41,3 @@ def poly_within_area(poly_points, area_ll, area_ur):
         if not point_within_area(point, area_ll, area_ur):
             return False
     return True
-
