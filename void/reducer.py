@@ -1,10 +1,10 @@
 #!/usr/bin/env/ python
-""" 
+"""
 void_reducer 0.1
 
-Prints header data from a FITS file and optionally marks it as 'reduced'. 
+Prints header data from a FITS file and optionally marks it as 'reduced'.
 
-Usage: 
+Usage:
   void_reducer FITS_FNAME [--mark] [--verbosity=V]
   void_reducer -v | --version
   void_reducer -h | --help
@@ -22,18 +22,16 @@ from astropy.io import fits
 import logging
 import json
 
-import void.common as common
-import void.config as config
+from void import common, config
 
 log = logging.getLogger(__name__)
 
 
 
 def print_header_data(fits_fname):
-    """ 
-    Prints header data from a certain FITS file as a JSON dictionary. 
     """
-
+    Prints header data from a certain FITS file as a JSON dictionary.
+    """
     log.debug('printing data for %s', fits_fname)
 
     with fits.open(fits_fname) as hdul:
@@ -45,7 +43,7 @@ def print_header_data(fits_fname):
         focus = header_dict['FOCUSPOS']
         ra_center = header_dict['OBJCTRA']
         dec_center = header_dict['OBJCTDEC']
-        
+
         x_pix_size = header_dict['NAXIS1']
         y_pix_size = header_dict['NAXIS2']
         x_binning = header_dict['XBINNING']
@@ -58,10 +56,10 @@ def print_header_data(fits_fname):
         y_deg_size = float(y_pix_size * y_binning * y_scale) / 3600
 
         return_dict = {
-            'date_obs': date_obs, 
-            'exposition': exp, 
+            'date_obs': date_obs,
+            'exposition': exp,
             'focus': focus,
-            'ra_center': ra_center, 
+            'ra_center': ra_center,
             'dec_center': dec_center,
             'x_deg_size': x_deg_size,
             'y_deg_size': y_deg_size
@@ -71,7 +69,6 @@ def print_header_data(fits_fname):
         sys.stdout.write(f'{json_dict}\n')
 
 def mark_reduced(fits_fname):
-
     log.debug('reducing %s', fits_fname)
     data, header = fits.getdata(fits_fname, header=True)
     header['REDUCED'] = 'True'
@@ -80,7 +77,7 @@ def mark_reduced(fits_fname):
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
-    common._configure_log(arguments['--verbosity'])
+    common.configure_log(arguments['--verbosity'])
     log.debug('initialising')
 
     fits_fname = arguments['FITS_FNAME']
