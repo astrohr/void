@@ -2,5 +2,4 @@
 
 from void.sniffer import main
 
-
 main()

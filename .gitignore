@@ -116,3 +116,14 @@ dmypy.json
 
 # IDEs
 .idea/
+
+# Editors
+.vscode/
+
+# Pyenv stuff
+void/bin
+void/include
+void/lib
+void/lib64
+void/pyenv.cfg
+void/.python-version
