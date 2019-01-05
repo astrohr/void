@@ -23,7 +23,7 @@ import sys
 import docopt
 from astropy.io import fits
 
-from void import common, config, sniffer
+from void import common, config
 
 log = logging.getLogger(__name__)
 
@@ -74,8 +74,6 @@ def main():
     common.configure_log(arguments['--verbosity'])
     log.debug('initialising')
 
-    mark = arguments['--mark']
-
     fnames_arr = []
 
     for line in sys.stdin:
@@ -83,8 +81,6 @@ def main():
 
     for fname in fnames_arr:
         print_header_data(fname)
-        if mark:
-            sniffer.Sniffer.flag_file(mark, fname)
 
 
 if __name__ == '__main__':
