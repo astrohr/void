@@ -19,9 +19,5 @@ setup(
         'astropy>=3.1.1,<3.2',
         'psycopg2>=2.7,<2.8',
     ],
-    extras_require={
-        'dev': [
-            'flake8',
-        ],
-    },
+    extras_require={'dev': ['flake8', 'black', 'coverage']},
 )

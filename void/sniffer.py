@@ -25,6 +25,7 @@ Options:
 import logging
 import os
 import sys
+from typing import Optional
 
 import docopt
 from astropy.io import fits
@@ -39,12 +40,13 @@ class Sniffer:
     DISABLED_FLAG: str = '0'
 
     def __init__(
-            self,
-            search_dir: str,
-            maxn: int,
-            tmin: str,
-            tmax: str,
-            flag_name: str):
+        self,
+        search_dir: str,
+        maxn: Optional[int] = None,
+        tmin: Optional[str] = None,
+        tmax: Optional[str] = None,
+        flag_name: Optional[str] = None,
+    ):
         self.search_dir = search_dir
         self.maxn = maxn
         self.tmin = tmin
@@ -76,7 +78,9 @@ class Sniffer:
     def find_fits(self):
         for root, _, files in os.walk(self.search_dir):
             for file in files:
-                abs_fname = os.path.normpath(os.path.join(root, file))
+                abs_fname = os.path.relpath(
+                    os.path.normpath(os.path.join(root, file))
+                )
                 if self.validate_file(abs_fname):
                     yield abs_fname
 
@@ -91,23 +95,23 @@ class Sniffer:
             time_str = hdul[0].header['DATE-OBS']
             return self.parse_time(time_str)
 
-    @staticmethod
-    def flag_file(flag_name, fits_fname):
+    def flag_file(self, fits_fname):
         data, header = fits.getdata(fits_fname, header=True)
-        header[flag_name] = 'True'
+        header[self.flag_name] = 'True'
         fits.writeto(fits_fname, data, header, overwrite=True)
 
     def validate_file(self, fname):
         if not fname.endswith('.fits') and not fname.endswith('.fit'):
             return False
-        if self.flag_name and not self.check_flag(fname):
+        if self.flag_name and self.check_flag(fname):
             return False
         if not self.filter_fits(fname):
             return False
         if self.maxn is not None and self.count >= self.maxn:
             raise StopIteration
         self.count += 1
-        self.flag_file(self.flag_name, fname)
+        if self.flag_name:
+            self.flag_file(fname)
         return True
 
     def filter_fits(self, fname_i):
