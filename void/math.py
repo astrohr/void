@@ -13,8 +13,10 @@ def calculate_poly(image_center, image_x, image_y, pos_angle):
     pos_angle = np.deg2rad(pos_angle)
 
     image_diag = np.sqrt(image_x ** 2 + image_y ** 2)
-    gamma = np.arccos((image_x ** 2 + image_diag ** 2 - image_y ** 2) / (2 * image_x * image_diag))
-    delta = np.arccos((image_y ** 2 + image_diag ** 2 - image_x ** 2) / (2 * image_y * image_diag))
+    gamma = np.arccos((image_x ** 2 + image_diag ** 2 -
+                       image_y ** 2) / (2 * image_x * image_diag))
+    delta = np.arccos((image_y ** 2 + image_diag ** 2 -
+                       image_x ** 2) / (2 * image_y * image_diag))
 
     poly_arr = np.zeros(4)
 
