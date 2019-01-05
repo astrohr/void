@@ -2,15 +2,14 @@
 """
 void_reducer 0.1
 
-Prints header data from a FITS filenames from stdin and optionally mark them.
+Prints header data from a FITS filenames from stdin.
 
 Usage:
-  void_reducer [--mark=MARK] [--verbosity=V]
+  void_reducer [--verbosity=V]
   void_reducer -v | --version
   void_reducer -h | --help
 
 Options:
-  -m --mark=MARK      Mark the file
   -h --help           Show this help screen
   -v --version        Show program name and version number
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
