@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+coverage erase
+coverage run void/tests
+coverage report
+coverage html
