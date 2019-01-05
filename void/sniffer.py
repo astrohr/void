@@ -76,7 +76,9 @@ class Sniffer:
     def find_fits(self):
         for root, _, files in os.walk(self.search_dir):
             for file in files:
-                abs_fname = os.path.normpath(os.path.join(root, file))
+                abs_fname = os.path.relpath(
+                    os.path.normpath(os.path.join(root, file))
+                )
                 if self.validate_file(abs_fname):
                     yield abs_fname
 
