@@ -81,8 +81,11 @@ class Sniffer:
                 abs_fname = os.path.relpath(
                     os.path.normpath(os.path.join(root, file))
                 )
-                if self.validate_file(abs_fname):
-                    yield abs_fname
+                try:
+                    if self.validate_file(abs_fname):
+                        yield abs_fname
+                except StopIteration:
+                    return
 
     @staticmethod
     def parse_time(time_str):
