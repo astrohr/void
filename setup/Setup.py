@@ -2,7 +2,9 @@
 """
 Example program to insert image paths into a database.
 
-Usage: Setup.py <db> (--user=USER) (--passwd=PASSWORD) (--src=IMAGES_FOLDER_PATH) [--host=HOST] [--port=PORT]
+Usage:
+  Setup.py <db> (--user=USER) (--passwd=PASSWORD) (--src=IMAGES_FOLDER_PATH) \
+  [--host=HOST] [--port=PORT]
 
 Options:
    -h, --help       Show this message.
@@ -32,7 +34,8 @@ if not port:
     port = "5432"
 
 # PostgreSQL opearations
-conn = psycopg2.connect(database=db, user=user, password=passwd, host=host, port=port)
+conn = psycopg2.connect(
+    database=db, user=user, password=passwd, host=host, port=port)
 
 print("Opened database successfully")
 
