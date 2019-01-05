@@ -25,6 +25,7 @@ Options:
 import logging
 import os
 import sys
+from typing import Optional
 
 import docopt
 from astropy.io import fits
@@ -39,12 +40,13 @@ class Sniffer:
     DISABLED_FLAG: str = '0'
 
     def __init__(
-            self,
-            search_dir: str,
-            maxn: int,
-            tmin: str,
-            tmax: str,
-            flag_name: str):
+        self,
+        search_dir: str,
+        maxn: Optional[int] = None,
+        tmin: Optional[str] = None,
+        tmax: Optional[str] = None,
+        flag_name: Optional[str] = None,
+    ):
         self.search_dir = search_dir
         self.maxn = maxn
         self.tmin = tmin
