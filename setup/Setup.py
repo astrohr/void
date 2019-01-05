@@ -35,16 +35,19 @@ if not port:
 
 # PostgreSQL opearations
 conn = psycopg2.connect(
-    database=db, user=user, password=passwd, host=host, port=port)
+    database=db, user=user, password=passwd, host=host, port=port
+)
 
 print("Opened database successfully")
 
 cur = conn.cursor()
 
 # Create table (example only)
-cur.execute('''CREATE TABLE OBSERVATIONS
+cur.execute(
+    '''CREATE TABLE OBSERVATIONS
       (ID INT PRIMARY KEY     NOT NULL,
-      PATH           TEXT    NOT NULL);''')
+      PATH           TEXT    NOT NULL);'''
+)
 
 print("Table created successfully")
 
@@ -52,8 +55,12 @@ content = os.listdir(src)
 imgs = [f for f in content if f.endswith(".fit")]
 
 for i, img in enumerate(imgs):
-    cur.execute("INSERT INTO OBSERVATIONS (ID,PATH) \
-        VALUES ({}, '{}');".format(i, os.path.abspath(img)))
+    cur.execute(
+        "INSERT INTO OBSERVATIONS (ID,PATH) \
+        VALUES ({}, '{}');".format(
+            i, os.path.abspath(img)
+        )
+    )
 
 print("Values inserted succesfully")
 

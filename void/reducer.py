@@ -60,7 +60,7 @@ def print_header_data(fits_fname):
             'ra_center': ra_center,
             'dec_center': dec_center,
             'x_deg_size': x_deg_size,
-            'y_deg_size': y_deg_size
+            'y_deg_size': y_deg_size,
         }
 
         json_dict = json.dumps(return_dict)
