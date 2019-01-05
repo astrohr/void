@@ -129,9 +129,7 @@ class SnifferTests(unittest.TestCase):
         self.kwargs['tmin'] = '2019-01-01T00:00:00'
         instance = sniffer.Sniffer(**self.kwargs)
         value = list(instance.find_fits())
-        expected = [
-            'void/tests/data/test_unflagged.fit',
-        ]
+        expected = ['void/tests/data/test_unflagged.fit']
         self.assertListEqual(expected, value)
         p_writeto.assert_not_called()
 
@@ -165,8 +163,6 @@ class SnifferTests(unittest.TestCase):
         self.kwargs['tmin'] = '2018-12-31T01:00:00'
         instance = sniffer.Sniffer(**self.kwargs)
         value = list(instance.find_fits())
-        expected = [
-            'void/tests/data/sub/test_in_sub_unflagged.fit',
-        ]
+        expected = ['void/tests/data/sub/test_in_sub_unflagged.fit']
         self.assertListEqual(expected, value)
         p_writeto.assert_not_called()
