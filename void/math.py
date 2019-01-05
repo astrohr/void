@@ -9,7 +9,7 @@ import numpy as np
 def calculate_poly(image_center, image_x, image_y, pos_angle):
     """ Calculate image border points. """
 
-    center_x, center_y = image_center
+    image_center = np.asarray(image_center)
     pos_angle = np.deg2rad(pos_angle)
 
     image_diag = np.sqrt(image_x ** 2 + image_y ** 2)
@@ -37,5 +37,6 @@ def calculate_poly(image_center, image_x, image_y, pos_angle):
         poly_arr[i] = [point_x, point_y]
 
     poly_arr *= mult
+    poly_arr += image_center
 
     return poly_arr
