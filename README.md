@@ -81,6 +81,12 @@ git clone git@github.com:frnhr/void.git .
 pip install -e .[dev]
 ```
 
+### Testing
+
+Two ways to run tests manually:
+ * run tests as a python module: `python -m void.tests` 
+ * run directly: `void/tests/__main__.py`
+
 ## Usage
 
 ...
