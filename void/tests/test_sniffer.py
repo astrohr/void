@@ -18,6 +18,7 @@ class MainTests(unittest.TestCase):
             '--tmax': 'baz',
             '--maxn': 'omgwhatcomesafterbaz',
             '--flag': None,
+            '--dry-run': False,
             '--verbosity': 789,
         }
         expected_call_kwargs = {
@@ -26,6 +27,7 @@ class MainTests(unittest.TestCase):
             'tmax': 'baz',
             'maxn': 'omgwhatcomesafterbaz',
             'flag_name': None,
+            'update_flag': True,
         }
         p_docopt.docopt.return_value = mock_args.copy()
         sniffer.main()
@@ -159,8 +161,8 @@ class SnifferTests(unittest.TestCase):
 
     def test_time_range(self, p_writeto):
         self.kwargs['flag_name'] = '0'
-        self.kwargs['tmax'] = '2019-01-01T00:00:00'
-        self.kwargs['tmin'] = '2018-12-31T01:00:00'
+        self.kwargs['tmax'] = '2017-12-01T00:00:00'
+        self.kwargs['tmin'] = '2017-01-01T00:00:00'
         instance = sniffer.Sniffer(**self.kwargs)
         value = list(instance.find_fits())
         expected = ['void/tests/data/sub/test_in_sub_unflagged.fit']

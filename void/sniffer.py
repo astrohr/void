@@ -6,7 +6,7 @@ Searches for FITS files without a custom header and outputs their paths.
 
 Usage:
   void_sniffer SEARCH_DIR [--tmin=TIME_MIN] [--tmax=TIME_MAX] \
-[--maxn=N] [--flag=HEADER | --noflag] [--verbosity=V]
+[--maxn=N] [--flag=HEADER | --ignore-flag] [--dry-run] [--verbosity=V]
   void_sniffer -v | --version
   void_sniffer -h | --help
 
@@ -15,7 +15,8 @@ Options:
   -a --tmax=TIME_MAX  High time threshold
   -n --maxn=N         Stop after outputing N images
   -f --flag=HEADER    Name of the header to look for, [default: VISNJAN]
-  -n --noflag         Skip header flag check
+  -n --ignore-flag    Skip header flag check
+  -d --dry-run        Skip writing to FITS header.
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
   -h --help           Show this help screen
   -v --version        Show program name and version number
@@ -46,6 +47,7 @@ class Sniffer:
         tmin: Optional[str] = None,
         tmax: Optional[str] = None,
         flag_name: Optional[str] = None,
+        update_flag: Optional[bool] = True,
     ):
         self.search_dir = search_dir
         self.maxn = maxn
@@ -55,6 +57,7 @@ class Sniffer:
             self.flag_name = None
         else:
             self.flag_name = flag_name
+        self.update_flag = update_flag
         self.count = 0
         self.time_first = None
         self.time_last = None
@@ -113,7 +116,7 @@ class Sniffer:
         if self.maxn is not None and self.count >= self.maxn:
             raise StopIteration
         self.count += 1
-        if self.flag_name:
+        if self.flag_name and self.update_flag:
             self.flag_file(fname)
         return True
 
@@ -143,6 +146,7 @@ def main():
         tmax=arguments['--tmax'],
         maxn=arguments['--maxn'],
         flag_name=arguments['--flag'],
+        update_flag=not arguments['--dry-run']
     )
     for fname_i in sniffer.find_fits():
         sys.stdout.write(f'{fname_i}\n')
