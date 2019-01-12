@@ -146,7 +146,7 @@ def main():
         tmax=arguments['--tmax'],
         maxn=arguments['--maxn'],
         flag_name=arguments['--flag'],
-        update_flag=not arguments['--dry-run']
+        update_flag=not arguments['--dry-run'],
     )
     for fname_i in sniffer.find_fits():
         sys.stdout.write(f'{fname_i}\n')
