@@ -57,7 +57,7 @@ def print_header_data(fits_fname):
 
         # Limiting magnitude
         mag_norm = header_dict['starZMAG']
-        mag_abs = mag_norm + 2.5 * np.log(exp)
+        mag_lim = mag_norm + 2.5 * np.log(exp)
 
         return_dict = {
             'date_obs': date_obs,
@@ -68,7 +68,7 @@ def print_header_data(fits_fname):
             'x_deg_size': x_deg_size,
             'y_deg_size': y_deg_size,
             'pos_angle': pos_angle,
-            'abs_magnitude': mag_abs
+            'mag_lim': mag_lim
         }
 
         json_dict = json.dumps(return_dict)
