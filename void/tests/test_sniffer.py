@@ -18,6 +18,7 @@ class MainTests(unittest.TestCase):
             '--tmax': 'baz',
             '--maxn': 'omgwhatcomesafterbaz',
             '--flag': None,
+            '--dry-run': False,
             '--verbosity': 789,
         }
         expected_call_kwargs = {
@@ -26,6 +27,7 @@ class MainTests(unittest.TestCase):
             'tmax': 'baz',
             'maxn': 'omgwhatcomesafterbaz',
             'flag_name': None,
+            'update_flag': True,
         }
         p_docopt.docopt.return_value = mock_args.copy()
         sniffer.main()
@@ -74,6 +76,18 @@ class SnifferTests(unittest.TestCase):
         self.assertListEqual(expected, value)
         p_writeto.assert_not_called()
 
+    def test_all_files_disabled_flag(self, p_writeto):
+        self.kwargs['flag_name'] = '0'
+        instance = sniffer.Sniffer(**self.kwargs)
+        value = list(instance.find_fits())
+        expected = [
+            'void/tests/data/test2_flagged.fit',
+            'void/tests/data/test_unflagged.fit',
+            'void/tests/data/sub/test_in_sub_unflagged.fit',
+        ]
+        self.assertListEqual(expected, value)
+        p_writeto.assert_not_called()
+
     def test_all_files_new_flag(self, p_writeto):
         self.kwargs['flag_name'] = 'foo'
         instance = sniffer.Sniffer(**self.kwargs)
@@ -99,3 +113,58 @@ class SnifferTests(unittest.TestCase):
         self.assertListEqual(expected, value)
         self.assertEqual(expected[0], p_writeto.mock_calls[0][1][0])
         self.assertEqual(expected[1], p_writeto.mock_calls[1][1][0])
+
+    def test_maxn(self, p_writeto):
+        self.kwargs['flag_name'] = '0'
+        self.kwargs['maxn'] = 2
+        instance = sniffer.Sniffer(**self.kwargs)
+        value = list(instance.find_fits())
+        expected = [
+            'void/tests/data/test2_flagged.fit',
+            'void/tests/data/test_unflagged.fit',
+        ]
+        self.assertListEqual(expected, value)
+        p_writeto.assert_not_called()
+
+    def test_min_time(self, p_writeto):
+        self.kwargs['flag_name'] = '0'
+        self.kwargs['tmin'] = '2019-01-01T00:00:00'
+        instance = sniffer.Sniffer(**self.kwargs)
+        value = list(instance.find_fits())
+        expected = ['void/tests/data/test_unflagged.fit']
+        self.assertListEqual(expected, value)
+        p_writeto.assert_not_called()
+
+    def test_max_time(self, p_writeto):
+        self.kwargs['flag_name'] = '0'
+        self.kwargs['tmax'] = '2019-01-01T00:00:00'
+        instance = sniffer.Sniffer(**self.kwargs)
+        value = list(instance.find_fits())
+        expected = [
+            'void/tests/data/test2_flagged.fit',
+            'void/tests/data/sub/test_in_sub_unflagged.fit',
+        ]
+        self.assertListEqual(expected, value)
+        p_writeto.assert_not_called()
+
+    def test_max_time_only_date(self, p_writeto):
+        self.kwargs['flag_name'] = '0'
+        self.kwargs['tmax'] = '2019-01-01'
+        instance = sniffer.Sniffer(**self.kwargs)
+        value = list(instance.find_fits())
+        expected = [
+            'void/tests/data/test2_flagged.fit',
+            'void/tests/data/sub/test_in_sub_unflagged.fit',
+        ]
+        self.assertListEqual(expected, value)
+        p_writeto.assert_not_called()
+
+    def test_time_range(self, p_writeto):
+        self.kwargs['flag_name'] = '0'
+        self.kwargs['tmax'] = '2017-12-01T00:00:00'
+        self.kwargs['tmin'] = '2017-01-01T00:00:00'
+        instance = sniffer.Sniffer(**self.kwargs)
+        value = list(instance.find_fits())
+        expected = ['void/tests/data/sub/test_in_sub_unflagged.fit']
+        self.assertListEqual(expected, value)
+        p_writeto.assert_not_called()
