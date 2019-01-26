@@ -127,3 +127,6 @@ void/lib
 void/lib64
 void/pyenv.cfg
 void/.python-version
+
+# coverage
+coverage_html_report

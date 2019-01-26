@@ -20,9 +20,5 @@ setup(
         'psycopg2>=2.7,<2.8',
         'numpy>=1.11.0,<1.16'
     ],
-    extras_require={
-        'dev': [
-            'flake8',
-        ],
-    },
+    extras_require={'dev': ['flake8', 'black', 'coverage']},
 )

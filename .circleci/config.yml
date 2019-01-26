@@ -31,6 +31,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -e .[dev]
+            pip install codecov
 
       - save_cache:
           paths:
@@ -42,7 +43,8 @@ jobs:
           command: |
             . venv/bin/activate
             bin/lint
-            python -m void.tests
+            bin/cover
+            codecov
 
       - store_artifacts:
           path: test-reports

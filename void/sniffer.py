@@ -6,7 +6,7 @@ Searches for FITS files without a custom header and outputs their paths.
 
 Usage:
   void_sniffer SEARCH_DIR [--tmin=TIME_MIN] [--tmax=TIME_MAX] \
-[--maxn=N] [--flag=HEADER | --noflag] [--verbosity=V]
+[--maxn=N] [--flag=HEADER | --ignore-flag] [--dry-run] [--verbosity=V]
   void_sniffer -v | --version
   void_sniffer -h | --help
 
@@ -15,7 +15,8 @@ Options:
   -a --tmax=TIME_MAX  High time threshold
   -n --maxn=N         Stop after outputing N images
   -f --flag=HEADER    Name of the header to look for, [default: VISNJAN]
-  -n --noflag         Skip header flag check
+  -n --ignore-flag    Skip header flag check
+  -d --dry-run        Skip writing to FITS header.
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
   -h --help           Show this help screen
   -v --version        Show program name and version number
@@ -25,6 +26,7 @@ Options:
 import logging
 import os
 import sys
+from typing import Optional
 
 import docopt
 from astropy.io import fits
@@ -39,12 +41,14 @@ class Sniffer:
     DISABLED_FLAG: str = '0'
 
     def __init__(
-            self,
-            search_dir: str,
-            maxn: int,
-            tmin: str,
-            tmax: str,
-            flag_name: str):
+        self,
+        search_dir: str,
+        maxn: Optional[int] = None,
+        tmin: Optional[str] = None,
+        tmax: Optional[str] = None,
+        flag_name: Optional[str] = None,
+        update_flag: Optional[bool] = True,
+    ):
         self.search_dir = search_dir
         self.maxn = maxn
         self.tmin = tmin
@@ -53,6 +57,7 @@ class Sniffer:
             self.flag_name = None
         else:
             self.flag_name = flag_name
+        self.update_flag = update_flag
         self.count = 0
         self.time_first = None
         self.time_last = None
@@ -76,9 +81,14 @@ class Sniffer:
     def find_fits(self):
         for root, _, files in os.walk(self.search_dir):
             for file in files:
-                abs_fname = os.path.normpath(os.path.join(root, file))
-                if self.validate_file(abs_fname):
-                    yield abs_fname
+                abs_fname = os.path.relpath(
+                    os.path.normpath(os.path.join(root, file))
+                )
+                try:
+                    if self.validate_file(abs_fname):
+                        yield abs_fname
+                except StopIteration:
+                    return
 
     @staticmethod
     def parse_time(time_str):
@@ -91,23 +101,23 @@ class Sniffer:
             time_str = hdul[0].header['DATE-OBS']
             return self.parse_time(time_str)
 
-    @staticmethod
-    def flag_file(flag_name, fits_fname):
+    def flag_file(self, fits_fname):
         data, header = fits.getdata(fits_fname, header=True)
-        header[flag_name] = 'True'
+        header[self.flag_name] = 'True'
         fits.writeto(fits_fname, data, header, overwrite=True)
 
     def validate_file(self, fname):
         if not fname.endswith('.fits') and not fname.endswith('.fit'):
             return False
-        if self.flag_name and not self.check_flag(fname):
+        if self.flag_name and self.check_flag(fname):
             return False
         if not self.filter_fits(fname):
             return False
         if self.maxn is not None and self.count >= self.maxn:
             raise StopIteration
         self.count += 1
-        self.flag_file(self.flag_name, fname)
+        if self.flag_name and self.update_flag:
+            self.flag_file(fname)
         return True
 
     def filter_fits(self, fname_i):
@@ -136,6 +146,7 @@ def main():
         tmax=arguments['--tmax'],
         maxn=arguments['--maxn'],
         flag_name=arguments['--flag'],
+        update_flag=not arguments['--dry-run'],
     )
     for fname_i in sniffer.find_fits():
         sys.stdout.write(f'{fname_i}\n')
