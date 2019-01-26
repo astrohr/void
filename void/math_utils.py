@@ -24,9 +24,9 @@ def calculate_poly(image_center, image_x, image_y, pos_angle):
     for i in range(4):
         m1, m2 = m1_arr[i], m2_arr[i]
 
-        point_x = m1 * np.cos(pos_angle + m2*phi)
-        point_y = m1 * np.sin(pos_angle + m2*phi)
-        
+        point_x = m1 * np.cos(pos_angle + m2 * phi)
+        point_y = m1 * np.sin(pos_angle + m2 * phi)
+
         poly_arr.append([point_x, point_y])
 
     poly_arr = np.asarray(poly_arr)
