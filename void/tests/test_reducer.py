@@ -77,7 +77,7 @@ class MainTests(unittest.TestCase):
         reducer.main()
         expected_output = (
             '{"date_obs": "2019-01-09T04:47:09.360", '
-            '"exposition": 60.0, "focus": 4408, "ra_center": 167.81972847, '
+            '"exposure": 60.0, "focus": 4408, "ra_center": 167.81972847, '
             '"dec_center": 63.3125430004, "x_deg_size": 0.73301928819258, '
             '"y_deg_size": 0.73463276991788, "pos_angle": 356.673098539}\n'
         )
@@ -90,7 +90,7 @@ class ReadHeaderDataTests(unittest.TestCase):
         expected = {
             'date_obs': '2019-01-09T04:47:09.360',
             'dec_center': 63.3125430004,
-            'exposition': 60.0,
+            'exposure': 60.0,
             'focus': 4408,
             'pos_angle': 356.673098539,
             'ra_center': 167.81972847,

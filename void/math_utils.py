@@ -7,7 +7,7 @@ import numpy as np
 
 
 def calculate_poly(image_center, image_x, image_y, pos_angle):
-    """ Calculate image border points. """
+    """ Calculate coordinates of the image vertices. """
 
     image_center = np.asarray(image_center)
     pos_angle = np.deg2rad(360 - pos_angle)

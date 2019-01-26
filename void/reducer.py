@@ -63,7 +63,7 @@ def read_header_data(fits_fname):
 
         return {
             'date_obs': date_obs,
-            'exposition': exp,
+            'exposure': exp,
             'focus': focus,
             'ra_center': ra_center,
             'dec_center': dec_center,
