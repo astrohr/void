@@ -56,8 +56,8 @@ def read_header_data(fits_fname):
         pos_angle = header_dict['PA']
 
         # Limiting magnitude
-        mag_norm = header_dict['starZMAG']
-        mag_lim = mag_norm + 2.5 * np.log(exp)
+        # mag_norm = header_dict['starZMAG']
+        # mag_lim = mag_norm + 2.5 * np.log(exp)
 
         log.debug('read %s', fits_fname)
 
@@ -70,7 +70,7 @@ def read_header_data(fits_fname):
             'x_deg_size': x_deg_size,
             'y_deg_size': y_deg_size,
             'pos_angle': pos_angle,
-            'mag_lim': mag_lim
+            # 'mag_lim': mag_lim
         }
 
 
