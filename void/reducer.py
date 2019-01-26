@@ -20,7 +20,6 @@ import logging
 import sys
 
 import docopt
-import numpy as np
 from astropy.io import fits
 
 from void import common
