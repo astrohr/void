@@ -18,6 +18,7 @@ setup(
         'docopt>=0.6.2,<0.7',
         'astropy>=3.1.1,<3.2',
         'psycopg2>=2.7,<2.8',
+        'numpy>=1.11.0,<1.16',
     ],
     extras_require={'dev': ['flake8', 'black', 'coverage']},
 )

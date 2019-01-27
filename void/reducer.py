@@ -20,9 +20,10 @@ import logging
 import sys
 
 import docopt
+import numpy as np
 from astropy.io import fits
 
-from void import common, config
+from void import common
 
 log = logging.getLogger(__name__)
 
@@ -39,30 +40,37 @@ def read_header_data(fits_fname):
         date_obs = header_dict['DATE-OBS']
         exp = header_dict['EXPTIME']
         focus = header_dict['FOCUSPOS']
-        ra_center = header_dict['OBJCTRA']
-        dec_center = header_dict['OBJCTDEC']
+        ra_center = header_dict['CRVAL1']
+        dec_center = header_dict['CRVAL2']
 
         x_pix_size = header_dict['NAXIS1']
         y_pix_size = header_dict['NAXIS2']
-        x_binning = header_dict['XBINNING']
-        y_binning = header_dict['YBINNING']
 
-        x_scale = config.SCALE_X_BIN1
-        y_scale = config.SCALE_Y_BIN1
+        # Scaling factors in [deg/px]
+        x_scale = abs(header_dict['CDELT1'])
+        y_scale = abs(header_dict['CDELT2'])
 
-        x_deg_size = float(x_pix_size * x_binning * x_scale) / 3600
-        y_deg_size = float(y_pix_size * y_binning * y_scale) / 3600
+        x_deg_size = float(x_pix_size * x_scale)
+        y_deg_size = float(y_pix_size * y_scale)
+
+        pos_angle = header_dict['PA']
+
+        # Limiting magnitude
+        mag_norm = header_dict['ZMAG']
+        mag_lim = mag_norm + 2.5 * np.log(exp)
 
         log.debug('read %s', fits_fname)
 
         return {
             'date_obs': date_obs,
-            'exposition': exp,
+            'exposure': exp,
             'focus': focus,
             'ra_center': ra_center,
             'dec_center': dec_center,
             'x_deg_size': x_deg_size,
             'y_deg_size': y_deg_size,
+            'pos_angle': pos_angle,
+            'mag_lim': mag_lim,
         }
 
 

@@ -76,10 +76,12 @@ class MainTests(unittest.TestCase):
         p_sys.stdin = ['void/tests/data/test_unflagged.fit']
         reducer.main()
         expected_output = (
-            '{"date_obs": "2019-01-09T04:47:09.360", "exposition": 60.0, '
-            '"focus": 4408, "ra_center": "11 11 13.00", '
-            '"dec_center": "+63 18 32.0", "x_deg_size": 0.7300444444444444, '
-            '"y_deg_size": 0.7300444444444444}\n'
+            '{"date_obs": "2019-01-09T04:47:09.360", "exposure": 60.0, '
+            '"focus": 4408, "ra_center": 167.81972847, '
+            '"dec_center": 63.3125430004, '
+            '"x_deg_size": 0.73301928819258, '
+            '"y_deg_size": 0.73463276991788, '
+            '"pos_angle": 356.673098539, "mag_lim": 29.81385684255525}\n'
         )
         p_sys.stdout.write.assert_called_with(expected_output)
 
@@ -89,12 +91,14 @@ class ReadHeaderDataTests(unittest.TestCase):
         data = reducer.read_header_data('void/tests/data/test_unflagged.fit')
         expected = {
             'date_obs': '2019-01-09T04:47:09.360',
-            'dec_center': '+63 18 32.0',
-            'exposition': 60.0,
+            'dec_center': 63.312_543_000_4,
+            'exposure': 60.0,
             'focus': 4408,
-            'ra_center': '11 11 13.00',
-            'x_deg_size': 0.730_044_444_444_444_4,
-            'y_deg_size': 0.730_044_444_444_444_4,
+            'mag_lim': 29.813_856_842_555_25,
+            'pos_angle': 356.673_098_539,
+            'ra_center': 167.819_728_47,
+            'x_deg_size': 0.733_019_288_192_58,
+            'y_deg_size': 0.734_632_769_917_88,
         }
         self.assertDictEqual(expected, data)
 
