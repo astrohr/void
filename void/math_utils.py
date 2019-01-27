@@ -7,7 +7,7 @@ import numpy as np
 
 
 def sort_ndarray(arr):
-    return sorted(arr, key=lambda x: sum(x))
+    return sorted(arr, key=sum)
 
 
 def calculate_poly(image_center, image_x, image_y, pos_angle):
