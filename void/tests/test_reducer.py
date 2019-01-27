@@ -68,11 +68,12 @@ class MainTests(unittest.TestCase):
         self.assertListEqual(expected_calls, p_log.warning.mock_calls)
         p_sys.stdout.write.assert_not_called()
 
+    @staticmethod
     @mock.patch('void.reducer.common')
     @mock.patch('void.reducer.docopt')
     @mock.patch('void.reducer.log')
     @mock.patch('void.reducer.sys')
-    def test_main(self, p_sys, *_):
+    def test_main(p_sys, *_):
         p_sys.stdin = ['void/tests/data/test_unflagged.fit']
         reducer.main()
         expected_output = (
