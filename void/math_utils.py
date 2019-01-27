@@ -6,6 +6,10 @@ Miscellaneous math functions
 import numpy as np
 
 
+def sort_ndarray(arr):
+    return sorted(arr, key=lambda x: sum(x))
+
+
 def calculate_poly(image_center, image_x, image_y, pos_angle):
     """ Calculate coordinates of the image vertices. """
 
@@ -32,5 +36,7 @@ def calculate_poly(image_center, image_x, image_y, pos_angle):
     poly_arr = np.asarray(poly_arr)
     poly_arr *= mult
     poly_arr += image_center
+
+    poly_arr = sort_ndarray(poly_arr)
 
     return poly_arr

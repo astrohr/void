@@ -89,13 +89,13 @@ class ReadHeaderDataTests(unittest.TestCase):
         data = reducer.read_header_data('void/tests/data/test_unflagged.fit')
         expected = {
             'date_obs': '2019-01-09T04:47:09.360',
-            'dec_center': 63.3125430004,
+            'dec_center': 63.312_543_000_4,
             'exposure': 60.0,
             'focus': 4408,
-            'pos_angle': 356.673098539,
-            'ra_center': 167.81972847,
-            'x_deg_size': 0.73301928819258,
-            'y_deg_size': 0.73463276991788
+            'pos_angle': 356.673_098_539,
+            'ra_center': 167.819_728_47,
+            'x_deg_size': 0.733_019_288_192_58,
+            'y_deg_size': 0.734_632_769_917_88,
         }
         self.assertDictEqual(expected, data)
 
