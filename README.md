@@ -84,8 +84,8 @@ pip install -e .[dev]
 ### Testing
 
 Two ways to run tests manually:
-  * run tests as a python module: `python -m void.tests` 
-  * run directly: `void/tests/__main__.py`
+ * run tests as a python module: `python -m void.tests` 
+ * run directly: `void/tests/__main__.py`
 
 ## Usage
 
