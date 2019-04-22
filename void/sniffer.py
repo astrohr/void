@@ -13,8 +13,8 @@ Usage:
 Options:
   -i --tmin=TIME_MIN  Low time threshold
   -a --tmax=TIME_MAX  High time threshold
-  -n --maxn=N         Stop after outputing N images
-  -f --flag=HEADER    Name of the header to look for, [default: VISNJAN]
+  -n --maxn=N         Stop after outputting N images
+  -f --flag=HEADER    Name of the header to look for, [default: VOID]
   -n --ignore-flag    Skip header flag check
   -d --dry-run        Skip writing to FITS header.
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
@@ -26,13 +26,14 @@ Options:
 import logging
 import os
 import sys
+import datetime
 from typing import Optional
 
 import docopt
 from astropy.io import fits
 from astropy.time import Time
 
-from void import common
+from void import common, reducer
 
 log = logging.getLogger(__name__)
 
@@ -72,7 +73,7 @@ class Sniffer:
         log.debug('checking flag %s', fits_fname)
         with fits.open(fits_fname) as hdul:
             header_dict = hdul[0].header
-            if header_dict.get(self.flag_name, '').strip():
+            if header_dict.get(self.flag_name + '_DT', '').strip():
                 log.debug('true: %s', fits_fname)
                 return True
         log.debug('false: %s', fits_fname)
@@ -103,7 +104,10 @@ class Sniffer:
 
     def flag_file(self, fits_fname):
         data, header = fits.getdata(fits_fname, header=True)
-        header[self.flag_name] = 'True'
+        header[self.flag_name + '_DT'] = Time(
+            datetime.datetime.now().timestamp(), format='unix'
+        ).isot
+        header[self.flag_name + '_VS'] = reducer.VERSION
         fits.writeto(fits_fname, data, header, overwrite=True)
 
     def validate_file(self, fname):

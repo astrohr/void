@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-void_reducer 0.1
+void_reducer {VERSION}
 
 Prints header data from a FITS filenames from stdin.
 
@@ -20,12 +20,14 @@ import logging
 import sys
 
 import docopt
-import numpy as np
 from astropy.io import fits
 
-from void import common
+from void import common, math_utils
 
 log = logging.getLogger(__name__)
+
+VERSION = '0.1'
+__doc__ = __doc__.format(VERSION=VERSION)  # pylint: disable=unused-import
 
 
 def read_header_data(fits_fname):
@@ -39,7 +41,8 @@ def read_header_data(fits_fname):
 
         date_obs = header_dict['DATE-OBS']
         exp = header_dict['EXPTIME']
-        focus = header_dict['FOCUSPOS']
+
+        # Image center in degrees
         ra_center = header_dict['CRVAL1']
         dec_center = header_dict['CRVAL2']
 
@@ -50,27 +53,25 @@ def read_header_data(fits_fname):
         x_scale = abs(header_dict['CDELT1'])
         y_scale = abs(header_dict['CDELT2'])
 
+        # Image size in degrees
         x_deg_size = float(x_pix_size * x_scale)
         y_deg_size = float(y_pix_size * y_scale)
 
         pos_angle = header_dict['PA']
 
-        # Limiting magnitude
-        mag_norm = header_dict['ZMAG']
-        mag_lim = mag_norm + 2.5 * np.log(exp)
+        observer = header_dict['OBSERVER']
+
+        poly_points = math_utils.calculate_poly(
+            [ra_center, dec_center], x_deg_size, y_deg_size, pos_angle
+        )
 
         log.debug('read %s', fits_fname)
 
         return {
             'date_obs': date_obs,
             'exposure': exp,
-            'focus': focus,
-            'ra_center': ra_center,
-            'dec_center': dec_center,
-            'x_deg_size': x_deg_size,
-            'y_deg_size': y_deg_size,
-            'pos_angle': pos_angle,
-            'mag_lim': mag_lim,
+            'observer': observer,
+            'polygon': poly_points,
         }
 
 
