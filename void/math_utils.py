@@ -38,5 +38,6 @@ def calculate_poly(image_center, image_x, image_y, pos_angle):
     poly_arr += image_center
 
     poly_arr = sort_ndarray(poly_arr)
+    poly_arr = np.asarray(poly_arr).tolist()
 
     return poly_arr

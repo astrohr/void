@@ -103,7 +103,7 @@ class SnifferTests(unittest.TestCase):
         self.assertEqual(expected[2], p_writeto.mock_calls[2][1][0])
 
     def test_all_files_known_flag(self, p_writeto):
-        self.kwargs['flag_name'] = 'VISNJAN'
+        self.kwargs['flag_name'] = 'VOID'
         instance = sniffer.Sniffer(**self.kwargs)
         value = list(instance.find_fits())
         expected = [

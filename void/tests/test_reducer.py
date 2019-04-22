@@ -78,11 +78,11 @@ class MainTests(unittest.TestCase):
         reducer.main()
         expected_output = (
             '{"date_obs": "2019-01-09T04:47:09.360", "exposure": 60.0, '
-            '"focus": 4408, "ra_center": 167.81972847, '
-            '"dec_center": 63.3125430004, '
-            '"x_deg_size": 0.73301928819258, '
-            '"y_deg_size": 0.73463276991788, '
-            '"pos_angle": 356.673098539, "mag_lim": 29.81385684255525}\n'
+            '"observer": "", '
+            '"polygon": [[167.47515289626557, 62.92457609477469], '
+            '[167.4325201282204, 63.65797077277967], '
+            '[168.2069368117796, 62.967115228020326], '
+            '[168.16430404373443, 63.7005099060253]]}\n'
         )
         p_sys.stdout.write.assert_called_with(expected_output)
 
@@ -92,14 +92,14 @@ class ReadHeaderDataTests(unittest.TestCase):
         data = reducer.read_header_data('void/tests/data/test_unflagged.fit')
         expected = {
             'date_obs': '2019-01-09T04:47:09.360',
-            'dec_center': 63.312_543_000_4,
             'exposure': 60.0,
-            'focus': 4408,
-            'mag_lim': 29.813_856_842_555_25,
-            'pos_angle': 356.673_098_539,
-            'ra_center': 167.819_728_47,
-            'x_deg_size': 0.733_019_288_192_58,
-            'y_deg_size': 0.734_632_769_917_88,
+            'observer': '',
+            'polygon': [
+                [167.475_152_896_265_57, 62.924_576_094_774_69],
+                [167.432_520_128_220_4, 63.657_970_772_779_67],
+                [168.206_936_811_779_6, 62.967_115_228_020_326],
+                [168.164_304_043_734_43, 63.700_509_906_025_3],
+            ],
         }
         self.assertDictEqual(expected, data)
 
