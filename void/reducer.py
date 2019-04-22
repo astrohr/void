@@ -29,6 +29,7 @@ log = logging.getLogger(__name__)
 VERSION = '0.1'
 __doc__ = __doc__.format(VERSION=VERSION)
 
+
 def read_header_data(fits_fname):
     """
     Read header data from a certain FITS file as a JSON dictionary.

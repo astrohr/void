@@ -104,7 +104,9 @@ class Sniffer:
 
     def flag_file(self, fits_fname):
         data, header = fits.getdata(fits_fname, header=True)
-        header[self.flag_name + '_DATE'] = Time(datetime.datetime.now().timestamp(), format='unix').isot
+        header[self.flag_name + '_DATE'] = Time(
+            datetime.datetime.now().timestamp(), format='unix'
+        ).isot
         header[self.flag_name + '_VERSION'] = reducer.VERSION
         fits.writeto(fits_fname, data, header, overwrite=True)
 
