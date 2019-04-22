@@ -27,7 +27,7 @@ from void import common, math_utils
 log = logging.getLogger(__name__)
 
 VERSION = '0.1'
-__doc__ = __doc__.format(VERSION=VERSION)  # noqa
+__doc__ = __doc__.format(VERSION=VERSION)  # pylint: disable=unused-import
 
 
 def read_header_data(fits_fname):
