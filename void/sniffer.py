@@ -73,7 +73,7 @@ class Sniffer:
         log.debug('checking flag %s', fits_fname)
         with fits.open(fits_fname) as hdul:
             header_dict = hdul[0].header
-            if header_dict.get(self.flag_name + '_DATE', '').strip():
+            if header_dict.get(self.flag_name + '_DT', '').strip():
                 log.debug('true: %s', fits_fname)
                 return True
         log.debug('false: %s', fits_fname)
@@ -104,10 +104,10 @@ class Sniffer:
 
     def flag_file(self, fits_fname):
         data, header = fits.getdata(fits_fname, header=True)
-        header[self.flag_name + '_DATE'] = Time(
+        header[self.flag_name + '_DT'] = Time(
             datetime.datetime.now().timestamp(), format='unix'
         ).isot
-        header[self.flag_name + '_VERSION'] = reducer.VERSION
+        header[self.flag_name + '_VS'] = reducer.VERSION
         fits.writeto(fits_fname, data, header, overwrite=True)
 
     def validate_file(self, fname):
