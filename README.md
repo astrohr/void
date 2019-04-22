@@ -7,6 +7,24 @@ Setup
 
 ### PostgreSQL
 
+#### Docker (recommended)
+
+
+Start the DB in foreground:
+```
+$ ./d up db
+```
+
+Start the DB in background:
+```
+$ ./d start db
+```
+
+Stopping:
+```
+$ ./d stop db
+```
+
 #### Ubuntu / Debian
 
 1.  `cd` into `setup` folder
@@ -21,8 +39,6 @@ Setup
 5.  Create a new database: `createdb <db_name>`
 
 6.  Run `Setup.py <db> (--user=USER) (--passwd=PASSWORD) (--src=IMAGES_FOLDER_PATH) [--host=HOST] [--port=PORT]`
-
-7.  The `dataset` folder contains sample images and can used for testing: `--src dataset`
 
 #### Mac
 
