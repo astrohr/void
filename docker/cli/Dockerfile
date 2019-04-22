@@ -16,7 +16,7 @@ RUN mkdir -p /var/run/sshd &&\
 RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
-WORKDIR "/var/void"
+WORKDIR /var/void
 
 COPY . /var/void
 

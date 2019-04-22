@@ -11,20 +11,19 @@ Setup
 
 Postgres port is forwarded to `5433` (standard port for Postgres is `5432`).
 
-
 Start the DB in foreground:
-```
-$ ./d up db
+``` bash
+./d up db
 ```
 
 Start the DB in background:
-```
-$ ./d start db
+``` bash
+./d start db
 ```
 
 Stopping:
-```
-$ ./d stop db
+``` bash
+./d stop db
 ```
 
 #### Ubuntu / Debian
