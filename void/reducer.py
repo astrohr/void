@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-void_reducer 0.1
+void_reducer {VERSION}
 
 Prints header data from a FITS filenames from stdin.
 
@@ -26,6 +26,8 @@ from void import common, math_utils
 
 log = logging.getLogger(__name__)
 
+VERSION = '0.1'
+__doc__ = __doc__.format(VERSION=VERSION)
 
 def read_header_data(fits_fname):
     """
