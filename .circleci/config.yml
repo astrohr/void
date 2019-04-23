@@ -59,6 +59,8 @@ jobs:
 
       - run:
           name: run tests
+          environment:
+            POSTGRES_PORT: 5432
           command: |
             . venv/bin/activate
             bin/lint
