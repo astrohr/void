@@ -3,11 +3,7 @@
 Miscellaneous math functions
 """
 
-import numpy as np  # noqa
-
-
-def sort_ndarray(arr):
-    return sorted(arr, key=sum)
+import numpy as np
 
 
 def calculate_poly(image_center, image_x, image_y, pos_angle):
@@ -37,7 +33,6 @@ def calculate_poly(image_center, image_x, image_y, pos_angle):
     poly_arr *= mult
     poly_arr += image_center
 
-    poly_arr = sort_ndarray(poly_arr)
     poly_arr = np.asarray(poly_arr).tolist()
 
     return poly_arr

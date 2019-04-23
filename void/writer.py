@@ -95,6 +95,10 @@ class Writer:
         log.debug(f'exe_str: {exe_str}')
         self.cursor.execute(exe_str)
 
+    def close(self):
+        self.conn.commit()
+        self.cursor.close()
+
 
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
@@ -115,6 +119,7 @@ def main():
             except Exception as e:
                 log.warning(f'{e}', exc_info=True)
         log.debug('EOF')
+        writer.close()
     except KeyboardInterrupt:
         log.debug('SIGINT')
 
