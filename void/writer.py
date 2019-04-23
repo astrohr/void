@@ -83,17 +83,17 @@ class Writer:
         data_dict = self.decode_data(data_str)
         path, date, exp, observer, poly = data_dict.values()
         date_tstamp = Time(date, format='isot', scale='utc').unix
-        poly_str = self.poly_to_linestr(date_tstamp, poly)
+        poly_str = "LINESTRING({:s})".format(
+            self.poly_to_linestr(date_tstamp, poly)
+        )
 
         exe_str = """
             INSERT INTO observations (path, exp, observer, poly)
-            VALUES ('{:s}', {}, '{:s}',
-            ST_MakePolygon(ST_GeomFromText('LINESTRING({:s})')));
-        """.format(
-            path, exp, observer, poly_str
-        )
+            VALUES (%s, %s, %s,
+            ST_MakePolygon(ST_GeomFromText(%s)));
+        """
         log.debug(f'exe_str: {exe_str}')
-        self.cursor.execute(exe_str)
+        self.cursor.execute(exe_str, (path, str(exp), observer, poly_str))
 
     def close(self):
         self.conn.commit()
