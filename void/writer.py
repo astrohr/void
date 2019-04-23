@@ -65,7 +65,6 @@ class Writer:
             'observer VARCHAR (100), '
             'poly GEOMETRY(POLYGON) NOT NULL);'
         )
-        return
 
     @staticmethod
     def decode_data(data_str):
@@ -87,14 +86,14 @@ class Writer:
         poly_str = self.poly_to_linestr(poly)
 
         exe_str = """
-            INSERT INTO observations (path, date_obs, exp, observer, poly) 
-            VALUES ('{:s}', '{:s}', {}, '{:s}', ST_MakePolygon(ST_GeomFromText('LINESTRING({:s})')));
+            INSERT INTO observations (path, date_obs, exp, observer, poly)
+            VALUES ('{:s}', '{:s}', {}, '{:s}',
+            ST_MakePolygon(ST_GeomFromText('LINESTRING({:s})')));
         """.format(
             path, date_tstamp, exp, observer, poly_str
         )
         log.debug(f'exe_str: {exe_str}')
         self.cursor.execute(exe_str)
-        return
 
 
 def main():
