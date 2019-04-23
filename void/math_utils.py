@@ -3,7 +3,7 @@
 Miscellaneous math functions
 """
 
-import numpy as np
+import numpy as np  # noqa
 
 
 def sort_ndarray(arr):
