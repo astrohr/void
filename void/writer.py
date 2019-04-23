@@ -74,7 +74,8 @@ class Writer:
         return data_dict
 
     @staticmethod
-    def poly_to_str(poly):
+    def poly_to_linestr(poly):
+        poly.append(poly[0])
         poly_str = ','.join('{} {}'.format(*vert) for vert in poly)
         log.debug(f'poly_str: {poly_str}')
         return poly_str
@@ -82,16 +83,16 @@ class Writer:
     def insert_data(self, data_str):
         data_dict = self.decode_data(data_str)
         path, date, exp, observer, poly = data_dict.values()
-        date_tstamp = Time(date, format='isot', scale='utc').unix
-        poly_str = self.poly_to_str(poly)
+        date_tstamp = Time(date, format='isot', scale='utc').iso
+        poly_str = self.poly_to_linestr(poly)
 
         exe_str = """
-            INSERT INTO observations (date_obs, path, exp, observer, poly) 
-            VALUES ('{:s}', {}, {}, '{:s}', ST_MakePolygon(ST_GenFromText('LINESTRING({:s})'), 4326))
+            INSERT INTO observations (path, date_obs, exp, observer, poly) 
+            VALUES ('{:s}', '{:s}', {}, '{:s}', ST_MakePolygon(ST_GeomFromText('LINESTRING({:s})')));
         """.format(
             path, date_tstamp, exp, observer, poly_str
         )
-
+        log.debug(f'exe_str: {exe_str}')
         self.cursor.execute(exe_str)
         return
 
@@ -113,7 +114,7 @@ def main():
             try:
                 writer.insert_data(line)
             except Exception as e:
-                log.warning(f'{e}', exec_info=True)
+                log.warning(f'{e}', exc_info=True)
         log.debug('EOF')
     except KeyboardInterrupt:
         log.debug('SIGINT')
