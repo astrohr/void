@@ -58,7 +58,7 @@ class DataBase:
             passwd=settings.POSTGRES_PASSWORD,
             db_name='postgres',
             host='localhost',
-            port='5433',
+            port=settings.POSTGRES_PORT,
         )
 
     @classmethod
@@ -68,5 +68,5 @@ class DataBase:
             passwd=settings.POSTGRES_PASSWORD,
             db_name=settings.POSTGRES_DB,
             host='localhost',
-            port='5433',
+            port=settings.POSTGRES_PORT,
         )

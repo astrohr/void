@@ -10,6 +10,7 @@ class Settings:
         'POSTGRES_USER': 'void',
         'POSTGRES_PASSWORD': 'void',
         'POSTGRES_DB': 'void',
+        'POSTGRES_PORT': 5433,
     }
 
     def load(self, env_file='/Users/fran/.voidrc'):
