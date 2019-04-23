@@ -68,6 +68,7 @@ def read_header_data(fits_fname):
         log.debug('read %s', fits_fname)
 
         return {
+            'path': fits_fname,
             'date_obs': date_obs,
             'exposure': exp,
             'observer': observer,
