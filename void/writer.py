@@ -78,7 +78,7 @@ class Writer:
             ST_MakePolygon(ST_GeomFromText(%s)));
         """
         log.debug(f'exe_str: {exe_str}')
-        self.db.exec(exe_str, (path, str(exp), observer, poly_str))
+        self.db.exec(exe_str, path, str(exp), observer, poly_str)
 
     def close(self):
         self.db.close()
