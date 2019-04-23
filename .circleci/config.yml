@@ -26,17 +26,6 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Waiting for Postgres to be ready
-          command: |
-            for i in `seq 1 100`;
-            do
-              nc -z localhost 5432 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for Postgres && exit 1
-
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -56,6 +45,17 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "setup.py" }}
+
+      - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 100`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgres && exit 1
 
       - run:
           name: run tests
