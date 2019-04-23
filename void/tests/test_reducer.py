@@ -76,7 +76,8 @@ class MainTests(unittest.TestCase):
         p_sys.stdin = ['void/tests/data/test_unflagged.fit']
         reducer.main()
         expected_output = (
-            '{"date_obs": "2019-01-09T04:47:09.360", "exposure": 60.0, '
+            '{"path": "void/tests/data/test_unflagged.fit", '
+            '"date_obs": "2019-01-09T04:47:09.360", "exposure": 60.0, '
             '"observer": "", '
             '"polygon": [[167.47515289626557, 62.92457609477469], '
             '[167.4325201282204, 63.65797077277967], '
@@ -90,6 +91,7 @@ class ReadHeaderDataTests(unittest.TestCase):
     def test_read_header_data(self):
         data = reducer.read_header_data('void/tests/data/test_unflagged.fit')
         expected = {
+            'path': 'void/tests/data/test_unflagged.fit',
             'date_obs': '2019-01-09T04:47:09.360',
             'exposure': 60.0,
             'observer': '',

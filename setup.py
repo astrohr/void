@@ -10,7 +10,7 @@ setup(
     url='https://github.com/astrohr/void',
     author='astrohr',
     author_email='dagor@astro.hr',
-    scripts=['scripts/void_sniffer', 'scripts/void_reducer'],
+    scripts=['scripts/void_sniffer', 'scripts/void_reducer', 'scripts/void_writer'],
     packages=['void'],
     license='MIT',
     keywords='',
