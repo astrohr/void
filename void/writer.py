@@ -60,10 +60,9 @@ class Writer:
             'CREATE TABLE IF NOT EXISTS observations '
             '(id SERIAL, '
             'path VARCHAR (500) NOT NULL, '
-            'date_obs TIMESTAMP NOT NULL, '
             'exp FLOAT NOT NULL, '
             'observer VARCHAR (100), '
-            'poly GEOMETRY(POLYGON) NOT NULL);'
+            'poly GEOMETRY(POLYGONZ) NOT NULL);'
         )
 
     @staticmethod
@@ -73,24 +72,25 @@ class Writer:
         return data_dict
 
     @staticmethod
-    def poly_to_linestr(poly):
+    def poly_to_linestr(date_tstamp, poly):
         poly.append(poly[0])
-        poly_str = ','.join('{} {}'.format(*vert) for vert in poly)
+        poly = [[*poly[i], date_tstamp] for i in range(len(poly))]
+        poly_str = ','.join('{} {} {}'.format(*vert) for vert in poly)
         log.debug(f'poly_str: {poly_str}')
         return poly_str
 
     def insert_data(self, data_str):
         data_dict = self.decode_data(data_str)
         path, date, exp, observer, poly = data_dict.values()
-        date_tstamp = Time(date, format='isot', scale='utc').iso
-        poly_str = self.poly_to_linestr(poly)
+        date_tstamp = Time(date, format='isot', scale='utc').unix
+        poly_str = self.poly_to_linestr(date_tstamp, poly)
 
         exe_str = """
-            INSERT INTO observations (path, date_obs, exp, observer, poly)
-            VALUES ('{:s}', '{:s}', {}, '{:s}',
+            INSERT INTO observations (path, exp, observer, poly)
+            VALUES ('{:s}', {}, '{:s}',
             ST_MakePolygon(ST_GeomFromText('LINESTRING({:s})')));
         """.format(
-            path, date_tstamp, exp, observer, poly_str
+            path, exp, observer, poly_str
         )
         log.debug(f'exe_str: {exe_str}')
         self.cursor.execute(exe_str)
@@ -119,9 +119,10 @@ def main():
             except Exception as e:
                 log.warning(f'{e}', exc_info=True)
         log.debug('EOF')
-        writer.close()
     except KeyboardInterrupt:
         log.debug('SIGINT')
+
+    writer.close()
 
 
 if __name__ == '__main__':
