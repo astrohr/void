@@ -81,7 +81,7 @@ class Sniffer:
 
     def find_fits(self):
         for root, _, files in os.walk(self.search_dir):
-            for file in files:
+            for file in sorted(files):
                 abs_fname = os.path.relpath(
                     os.path.normpath(os.path.join(root, file))
                 )
