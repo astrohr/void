@@ -32,11 +32,7 @@ def configure_log(verbosity):
 class DataBase:
     def __init__(self, user, passwd, db_name, host, port):
         self.conn = psycopg2.connect(
-            database=db_name,
-            user=user,
-            password=passwd,
-            host=host,
-            port=port,
+            database=db_name, user=user, password=passwd, host=host, port=port
         )
         self.cursor = self.conn.cursor()
         log.debug('connection established')
