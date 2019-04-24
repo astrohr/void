@@ -34,6 +34,13 @@ class Selector:
         settings.load()
         self.db = DataBase.get_void_db(settings)
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return None
+
     @staticmethod
     def line_to_point(line_str):
         """ Extract RA, Dec and get timestamp from an ephemeris string. """
@@ -63,12 +70,16 @@ class Selector:
             line_str = writer.poly_to_linestr(line_points)
         exe_str = """
             SELECT observations.path FROM observations
-            WHERE ST_Intersects(observations.poly,
+            WHERE ST_3DIntersects(observations.poly,
             ST_GeomFromText(%s));
         """
         self.db.exec(exe_str, line_str)
         paths = self.db.cursor.fetchall()
-        return paths.split
+        paths = [tup[0] for tup in paths]
+        return paths
+
+    def close(self):
+        self.db.close()
 
 
 def main():
