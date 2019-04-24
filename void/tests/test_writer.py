@@ -127,7 +127,7 @@ class MainTests(unittest.TestCase):
     def test_empty_line(self, p_sys, p_writer_cls, *_):
         p_sys.stdin = ['line 1', '', 'line 3']
         main()
-        writer = p_writer_cls.return_value
+        writer = p_writer_cls.return_value.__enter__.return_value
         expected = [mock.call('line 1'), mock.call('line 3')]
         self.assertEqual(expected, writer.insert_data.call_args_list)
 
@@ -138,7 +138,7 @@ class MainTests(unittest.TestCase):
     @mock.patch('void.writer.sys')
     def test_catch_exc(self, p_sys, p_log, p_writer_cls, *_):
         p_sys.stdin = ['line 1']
-        writer = p_writer_cls.return_value
+        writer = p_writer_cls.return_value.__enter__.return_value
         writer.insert_data.side_effect = ValueError('foo')
         main()
         p_log.warning.assert_called_once_with('foo', exc_info=True)
