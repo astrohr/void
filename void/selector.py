@@ -57,9 +57,8 @@ class Selector:
 
     def linestr_points_intersection(self, line_points):
         line_points.append(line_points[0])
-        writer = Writer()
-        line_str = writer.poly_to_linestr(line_points)
-        writer.close()
+        with Writer() as writer:
+            line_str = writer.poly_to_linestr(line_points)
         exe_str = """
             SELECT observations.path FROM observations
             WHERE ST_Contains(observations.poly,

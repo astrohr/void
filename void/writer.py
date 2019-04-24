@@ -36,6 +36,13 @@ class Writer:
         self.db = DataBase.get_void_db(settings)
         self.create_table()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return None
+
     def create_table(self):
         """
         Creates a table if one does not already exist in VOID.
@@ -93,23 +100,20 @@ def main():
     common.configure_log(arguments['--verbosity'])
     log.debug('listening')
 
-    writer = Writer()
-
-    try:
-        for line in sys.stdin:
-            line = line.strip()
-            if not line:
-                continue
-            log.info(f'processing {line}')
-            try:
-                writer.insert_data(line)
-            except Exception as e:
-                log.warning(f'{e}', exc_info=True)
-        log.debug('EOF')
-    except KeyboardInterrupt:
-        log.debug('SIGINT')
-
-    writer.close()
+    with Writer() as writer:
+        try:
+            for line in sys.stdin:
+                line = line.strip()
+                if not line:
+                    continue
+                log.info(f'processing {line}')
+                try:
+                    writer.insert_data(line)
+                except Exception as e:
+                    log.warning(f'{e}', exc_info=True)
+            log.debug('EOF')
+        except KeyboardInterrupt:
+            log.debug('SIGINT')
 
 
 if __name__ == '__main__':  # pragma no cover
