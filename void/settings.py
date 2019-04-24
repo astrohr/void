@@ -12,7 +12,9 @@ class Settings:
         'POSTGRES_DB': 'void',
     }
 
-    def load(self, env_file='/Users/fran/.voidrc'):
+    rc_str = os.path.abspath('~/.voidrc')
+
+    def load(self, env_file=rc_str):
         if not self._loaded:
             load_dotenv(env_file, verbose=True)
             self._loaded = True

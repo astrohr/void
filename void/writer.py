@@ -44,9 +44,7 @@ class Writer:
         return None
 
     def create_table(self):
-        """
-        Creates a table if one does not already exist in VOID.
-        """
+        """ Creates a table if one does not already exist in VOID. """
         self.db.exec('CREATE EXTENSION IF NOT EXISTS postgis;')
         self.db.exec(
             'CREATE TABLE IF NOT EXISTS observations '
@@ -66,17 +64,20 @@ class Writer:
 
     @staticmethod
     def poly_append_time(date_tstamp, poly):
+        """ Appends a timestamp to each polygon point and closes it. """
         poly.append(poly[0])
         poly = [[*poly[i], date_tstamp] for i in range(len(poly))]
         return poly
 
     @staticmethod
     def poly_to_linestr(poly):
+        """ Converts an enclosed 3D polygon to a Linestring. """
         poly_str = ','.join('{} {} {}'.format(*vert) for vert in poly)
         log.debug(f'poly_str: {poly_str}')
         return "LINESTRING({:s})".format(poly_str)
 
     def insert_data(self, data_str):
+        """ Inserts data from stdin into VOID. """
         data_dict = self.decode_data(data_str)
         path, date, exp, observer, poly = data_dict.values()
         date_tstamp = Time(date, format='isot', scale='utc').unix

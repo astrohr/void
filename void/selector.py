@@ -2,7 +2,7 @@
 """
 void_selector 0.1
 
-Outputs paths of images from VOID which cross the ephemeides
+Outputs paths of images from VOID which cross the ephemerides
  given by stdin.
 
 Usage:
@@ -36,6 +36,7 @@ class Selector:
 
     @staticmethod
     def line_to_point(line_str):
+        """ Extract RA, Dec and get Unix timestamp from an ephemeris string. """
         line_spl = line_str[:39].split()
         year, month, date, hour, ra, dec = line_spl
         if len(hour) > 2:
@@ -56,6 +57,7 @@ class Selector:
         return ra, dec, time_unix
 
     def linestr_points_intersection(self, line_points):
+        """ Get all image paths from VOID crossing a linestring. """
         line_points.append(line_points[0])
         with Writer() as writer:
             line_str = writer.poly_to_linestr(line_points)
