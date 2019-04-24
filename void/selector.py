@@ -100,7 +100,7 @@ def main():
 
         paths = selector.linestr_points_intersection(line_points)
         for path in paths:
-            sys.stdout.write(path)
+            sys.stdout.write(path + '\n')
     except KeyboardInterrupt:
         log.debug('SIGINT')
 

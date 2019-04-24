@@ -19,4 +19,5 @@ class LogTests(unittest.TestCase):
         with self.assertRaises(docopt.DocoptExit):
             common.configure_log('321')
 
+
 # TODO test for Settings
