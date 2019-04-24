@@ -97,13 +97,13 @@ def main():
             ra, dec, time_unix = selector.line_to_point(line)
             line_points.append([ra, dec, time_unix])
             log.info(f'processing {line}')
+
+        paths = selector.linestr_points_intersection(line_points)
+        for path in paths:
+            sys.stdout.write(path)
     except KeyboardInterrupt:
         log.debug('SIGINT')
 
-    paths = selector.linestr_points_intersection(line_points)
-    for path in paths:
-        sys.stdout.write(path)
 
-
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma no cover
     main()
