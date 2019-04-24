@@ -11,6 +11,7 @@ class Settings:
         'POSTGRES_USER': 'void',
         'POSTGRES_PASSWORD': 'void',
         'POSTGRES_DB': 'void',
+        'POSTGRES_PORT': 5433,
     }
 
     home = str(Path.home())

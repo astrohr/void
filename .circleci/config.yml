@@ -5,6 +5,7 @@
 version: 2
 jobs:
   build:
+
     docker:
       - image: circleci/python:3.7.1
 
@@ -12,6 +13,13 @@ jobs:
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
+
+      - image: mdillon/postgis:11
+        environment:
+          POSTGRES_USER: void
+          POSTGRES_DB: void
+          POSTGRES_PASSWORD: void
+          POSTGRES_PORT: 5432
 
     working_directory: ~/void_project
 
@@ -39,7 +47,20 @@ jobs:
           key: v1-dependencies-{{ checksum "setup.py" }}
 
       - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 100`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgres && exit 1
+
+      - run:
           name: run tests
+          environment:
+            POSTGRES_PORT: 5432
           command: |
             . venv/bin/activate
             bin/lint
