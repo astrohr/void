@@ -61,7 +61,7 @@ class Selector:
             line_str = writer.poly_to_linestr(line_points)
         exe_str = """
             SELECT observations.path FROM observations
-            WHERE ST_Contains(observations.poly,
+            WHERE ST_Intersects(observations.poly,
             ST_GeomFromText(%s));
         """
         self.db.exec(exe_str, line_str)
