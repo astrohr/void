@@ -47,7 +47,6 @@ class Writer:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
-        return None
 
     def create_table(self):
         """ Creates a table if one does not already exist in VOID. """
