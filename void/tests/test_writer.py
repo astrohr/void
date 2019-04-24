@@ -68,7 +68,6 @@ class WriterTests(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_poly_to_linestr(self):
-        writer = Writer()
         with Writer() as writer:
             poly = [[1, 2, 30], [3, 4, 30], [5, 6, 30], [1, 2, 30]]
             expected = "LINESTRING(1 2 30,3 4 30,5 6 30,1 2 30)"
