@@ -57,14 +57,24 @@ class WriterTests(unittest.TestCase):
         input_str = '{"foo": "bar"}'
         expected = {'foo': 'bar'}
         actual = writer.decode_data(input_str)
+        writer.close()
+        self.assertEqual(expected, actual)
+
+    def test_poly_append_time(self):
+        writer = Writer()
+        date_tstamp = 30
+        poly = [[1, 2], [3, 4], [5, 6]]
+        expected = [[1, 2, 30], [3, 4, 30], [5, 6, 30], [1, 2, 30]]
+        actual = writer.poly_append_time(date_tstamp, poly)
+        writer.close()
         self.assertEqual(expected, actual)
 
     def test_poly_to_linestr(self):
         writer = Writer()
-        poly = [[1, 2], [3, 4], [5, 6]]
-        date_tstamp = 30
-        expected = "1 2 30,3 4 30,5 6 30,1 2 30"
-        actual = writer.poly_to_linestr(date_tstamp, poly)
+        poly = [[1, 2, 30], [3, 4, 30], [5, 6, 30], [1, 2, 30]]
+        expected = "LINESTRING(1 2 30,3 4 30,5 6 30,1 2 30)"
+        actual = writer.poly_to_linestr(poly)
+        writer.close()
         self.assertEqual(expected, actual)
 
     def test_insert_data(self):
@@ -82,6 +92,7 @@ class WriterTests(unittest.TestCase):
             '[23.849030478603385, 30.315401336494187]]}'
         )
         writer.insert_data(data_str)
+        writer.close()
         with common.DataBase.get_void_db(settings) as db:
             db.exec('SELECT * FROM observations')
             records = db.cursor.fetchall()
@@ -89,7 +100,6 @@ class WriterTests(unittest.TestCase):
 
 
 class MainTests(unittest.TestCase):
-
     @mock.patch('void.writer.Writer')
     @mock.patch('void.writer.log')
     @mock.patch('void.writer.common')

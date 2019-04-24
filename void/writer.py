@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 void_writer 0.1
 
@@ -58,20 +58,23 @@ class Writer:
         return data_dict
 
     @staticmethod
-    def poly_to_linestr(date_tstamp, poly):
+    def poly_append_time(date_tstamp, poly):
         poly.append(poly[0])
         poly = [[*poly[i], date_tstamp] for i in range(len(poly))]
+        return poly
+
+    @staticmethod
+    def poly_to_linestr(poly):
         poly_str = ','.join('{} {} {}'.format(*vert) for vert in poly)
         log.debug(f'poly_str: {poly_str}')
-        return poly_str
+        return "LINESTRING({:s})".format(poly_str)
 
     def insert_data(self, data_str):
         data_dict = self.decode_data(data_str)
         path, date, exp, observer, poly = data_dict.values()
         date_tstamp = Time(date, format='isot', scale='utc').unix
-        poly_str = "LINESTRING({:s})".format(
-            self.poly_to_linestr(date_tstamp, poly)
-        )
+        poly = self.poly_append_time(date_tstamp, poly)
+        poly_str = self.poly_to_linestr(poly)
         exe_str = """
             INSERT INTO observations (path, exp, observer, poly)
             VALUES (%s, %s, %s,
