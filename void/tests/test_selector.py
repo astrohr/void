@@ -148,7 +148,7 @@ class MainTests(unittest.TestCase):
     @mock.patch('void.selector.log')
     @mock.patch('void.selector.Selector')
     def test_sigint(self, p_selector_cls, p_log, p_sys, *_):
-        m_lines = ['line 1',]
+        m_lines = ['line 1']
         selector = p_selector_cls.return_value
         p_sys.stdin = m_lines
         selector.line_to_point.side_effect = KeyboardInterrupt()
