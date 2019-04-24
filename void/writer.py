@@ -75,8 +75,8 @@ class Writer:
         return poly
 
     @staticmethod
-    def poly_to_linestr(poly):
-        """ Converts an enclosed 3D polygon to a Linestring. """
+    def vert_to_linestr(poly):
+        """ Converts an enclosed array of 3D points to a Linestring. """
         poly_str = ','.join('{} {} {}'.format(*vert) for vert in poly)
         log.debug(f'poly_str: {poly_str}')
         return "LINESTRING({:s})".format(poly_str)
@@ -87,7 +87,7 @@ class Writer:
         path, date, exp, observer, poly = data_dict.values()
         date_tstamp = Time(date, format='isot', scale='utc').unix
         poly = self.poly_append_time(date_tstamp, poly)
-        poly_str = self.poly_to_linestr(poly)
+        poly_str = self.vert_to_linestr(poly)
         self.db.exec(self.exe_str, path, str(exp), observer, poly_str)
 
     def close(self):

@@ -14,8 +14,7 @@ class Settings:
         'POSTGRES_PORT': 5433,
     }
 
-    home = str(Path.home())
-    rc_str = os.path.abspath(home + '/.voidrc')
+    rc_str = str(Path.home() / '.voidrc')
 
     def load(self, env_file=rc_str):
         if not self._loaded:

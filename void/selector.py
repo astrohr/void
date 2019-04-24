@@ -66,7 +66,7 @@ class Selector:
         """ Get all image paths from VOID crossing a linestring. """
         line_points.append(line_points[0])
         with Writer() as writer:
-            line_str = writer.poly_to_linestr(line_points)
+            line_str = writer.vert_to_linestr(line_points)
         exe_str = """
             SELECT observations.path FROM observations
             WHERE ST_3DIntersects(observations.poly,

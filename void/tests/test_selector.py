@@ -37,7 +37,7 @@ class SelectorTests(unittest.TestCase):
                 paths = ['P_1', 'P_2', 'P_3', 'R_1']
                 polygons = list(
                     map(
-                        lambda x: writer.poly_to_linestr(
+                        lambda x: writer.vert_to_linestr(
                             writer.poly_append_time(*x)
                         ),
                         [(T_1, P_1), (T_1, P_2), (T_1, P_3), (T_2, P_1)],
