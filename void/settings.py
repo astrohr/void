@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -13,7 +14,9 @@ class Settings:
         'POSTGRES_PORT': 5433,
     }
 
-    def load(self, env_file='/Users/fran/.voidrc'):
+    rc_str = str(Path.home() / '.voidrc')
+
+    def load(self, env_file=rc_str):
         if not self._loaded:
             load_dotenv(env_file, verbose=True)
             self._loaded = True

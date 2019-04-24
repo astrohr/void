@@ -53,35 +53,42 @@ class WriterTests(unittest.TestCase):
         self.assertIsNone(results)
 
     def test_decode_data(self):
-        writer = Writer()
-        input_str = '{"foo": "bar"}'
-        expected = {'foo': 'bar'}
-        actual = writer.decode_data(input_str)
+        with Writer() as writer:
+            input_str = '{"foo": "bar"}'
+            expected = {'foo': 'bar'}
+            actual = writer.decode_data(input_str)
+        self.assertEqual(expected, actual)
+
+    def test_poly_append_time(self):
+        with Writer() as writer:
+            date_tstamp = 30
+            poly = [[1, 2], [3, 4], [5, 6]]
+            expected = [[1, 2, 30], [3, 4, 30], [5, 6, 30], [1, 2, 30]]
+            actual = writer.poly_append_time(date_tstamp, poly)
         self.assertEqual(expected, actual)
 
     def test_poly_to_linestr(self):
-        writer = Writer()
-        poly = [[1, 2], [3, 4], [5, 6]]
-        date_tstamp = 30
-        expected = "1 2 30,3 4 30,5 6 30,1 2 30"
-        actual = writer.poly_to_linestr(date_tstamp, poly)
+        with Writer() as writer:
+            poly = [[1, 2, 30], [3, 4, 30], [5, 6, 30], [1, 2, 30]]
+            expected = "LINESTRING(1 2 30,3 4 30,5 6 30,1 2 30)"
+            actual = writer.vert_to_linestr(poly)
         self.assertEqual(expected, actual)
 
     def test_insert_data(self):
-        writer = Writer()
-        with common.DataBase.get_void_db(settings) as db:
-            db.exec('TRUNCATE TABLE observations;')
-        data_str = (
-            '{"path": '
-            '"/home/patrik/Workspace/void/void/tests/data/test2_flagged.fit", '
-            '"date_obs": "2018-12-26T18:41:49.300", '
-            '"exposure": 60.0, "observer": "", '
-            '"polygon": [[23.120172630110357, 30.275351191536046], '
-            '[23.080000853796616, 31.00642256430581], '
-            '[23.808858702289644, 31.046472709263952], '
-            '[23.849030478603385, 30.315401336494187]]}'
-        )
-        writer.insert_data(data_str)
+        with Writer() as writer:
+            with common.DataBase.get_void_db(settings) as db:
+                db.exec('TRUNCATE TABLE observations;')
+            data_str = (
+                '{"path": '
+                '"tests/data/test2_flagged.fit", '
+                '"date_obs": "2018-12-26T18:41:49.300", '
+                '"exposure": 60.0, "observer": "", '
+                '"polygon": [[23.120172630110357, 30.275351191536046], '
+                '[23.080000853796616, 31.00642256430581], '
+                '[23.808858702289644, 31.046472709263952], '
+                '[23.849030478603385, 30.315401336494187]]}'
+            )
+            writer.insert_data(data_str)
         with common.DataBase.get_void_db(settings) as db:
             db.exec('SELECT * FROM observations')
             records = db.cursor.fetchall()
@@ -89,7 +96,6 @@ class WriterTests(unittest.TestCase):
 
 
 class MainTests(unittest.TestCase):
-
     @mock.patch('void.writer.Writer')
     @mock.patch('void.writer.log')
     @mock.patch('void.writer.common')
@@ -120,7 +126,7 @@ class MainTests(unittest.TestCase):
     def test_empty_line(self, p_sys, p_writer_cls, *_):
         p_sys.stdin = ['line 1', '', 'line 3']
         main()
-        writer = p_writer_cls.return_value
+        writer = p_writer_cls.return_value.__enter__.return_value
         expected = [mock.call('line 1'), mock.call('line 3')]
         self.assertEqual(expected, writer.insert_data.call_args_list)
 
@@ -131,7 +137,7 @@ class MainTests(unittest.TestCase):
     @mock.patch('void.writer.sys')
     def test_catch_exc(self, p_sys, p_log, p_writer_cls, *_):
         p_sys.stdin = ['line 1']
-        writer = p_writer_cls.return_value
+        writer = p_writer_cls.return_value.__enter__.return_value
         writer.insert_data.side_effect = ValueError('foo')
         main()
         p_log.warning.assert_called_once_with('foo', exc_info=True)

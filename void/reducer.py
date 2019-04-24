@@ -31,9 +31,7 @@ __doc__ = __doc__.format(VERSION=VERSION)  # pylint: disable=unused-import
 
 
 def read_header_data(fits_fname):
-    """
-    Read header data from a certain FITS file as a JSON dictionary.
-    """
+    """ Read header data from a certain FITS file as a JSON dictionary. """
     log.debug('reading %s', fits_fname)
 
     with fits.open(fits_fname) as hdul:
@@ -77,6 +75,9 @@ def read_header_data(fits_fname):
 
 
 def encode_header_data(data):
+    """
+    Encode header data directory as a JSON string.
+    """
     log.debug(f'JSON data: {data}')
     json_dict = json.dumps(data)
     return json_dict
