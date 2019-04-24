@@ -36,7 +36,7 @@ class Selector:
 
     @staticmethod
     def line_to_point(line_str):
-        """ Extract RA, Dec and get Unix timestamp from an ephemeris string. """
+        """ Extract RA, Dec and get timestamp from an ephemeris string. """
         line_spl = line_str[:39].split()
         year, month, date, hour, ra, dec = line_spl
         if len(hour) > 2:

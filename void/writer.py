@@ -35,6 +35,12 @@ class Writer:
         settings.load()
         self.db = DataBase.get_void_db(settings)
         self.create_table()
+        self.exe_str = """
+            INSERT INTO observations (path, exp, observer, poly)
+            VALUES (%s, %s, %s,
+            ST_MakePolygon(ST_GeomFromText(%s)));
+        """
+        log.debug(f'exe_str: {self.exe_str}')
 
     def __enter__(self):
         return self
@@ -83,13 +89,7 @@ class Writer:
         date_tstamp = Time(date, format='isot', scale='utc').unix
         poly = self.poly_append_time(date_tstamp, poly)
         poly_str = self.poly_to_linestr(poly)
-        exe_str = """
-            INSERT INTO observations (path, exp, observer, poly)
-            VALUES (%s, %s, %s,
-            ST_MakePolygon(ST_GeomFromText(%s)));
-        """
-        log.debug(f'exe_str: {exe_str}')
-        self.db.exec(exe_str, path, str(exp), observer, poly_str)
+        self.db.exec(self.exe_str, path, str(exp), observer, poly_str)
 
     def close(self):
         self.db.close()
