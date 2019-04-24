@@ -19,6 +19,7 @@ setup(
         'astropy>=3.1.1,<3.2',
         'psycopg2>=2.7,<2.8',
         'numpy>=1.11.0,<1.16',
+        'python-dotenv>=0.10.1,<0.11',
     ],
     extras_require={'dev': ['flake8', 'black', 'coverage']},
 )
