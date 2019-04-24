@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -12,7 +13,8 @@ class Settings:
         'POSTGRES_DB': 'void',
     }
 
-    rc_str = os.path.abspath('~/.voidrc')
+    home = str(Path.home())
+    rc_str = os.path.abspath(home + '/.voidrc')
 
     def load(self, env_file=rc_str):
         if not self._loaded:
