@@ -120,7 +120,6 @@ class SelectorTests(unittest.TestCase):
 
 
 class MainTests(unittest.TestCase):
-
     @mock.patch('void.selector.common')
     @mock.patch('void.selector.docopt')
     @mock.patch('void.selector.sys')
@@ -128,7 +127,7 @@ class MainTests(unittest.TestCase):
     def test_lines(self, p_selector_cls, p_sys, *_):
         m_lines = ['line 1', '', 'line 3']
         selector = p_selector_cls.return_value
-        m_paths = ('path 1', 'path 2',)
+        m_paths = ('path 1', 'path 2')
         m_line_points = [('ra1', 'de1', 't1'), ('ra2', 'de2', 't2')]
         p_sys.stdin = m_lines
         selector.linestr_points_intersection.return_value = m_paths
@@ -136,11 +135,13 @@ class MainTests(unittest.TestCase):
         main()
         self.assertEqual(
             [mock.call('line 1'), mock.call('line 3')],
-            selector.line_to_point.call_args_list)
+            selector.line_to_point.call_args_list,
+        )
         selector.linestr_points_intersection.assert_called_once()
         self.assertEqual(
-            [mock.call('path 1'), mock.call('path 2')],
-            p_sys.stdout.write.call_args_list)
+            [mock.call('path 1\n'), mock.call('path 2\n')],
+            p_sys.stdout.write.call_args_list,
+        )
 
     @mock.patch('void.selector.common')
     @mock.patch('void.selector.docopt')
