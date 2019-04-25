@@ -112,7 +112,7 @@ class Sniffer:
         fits.writeto(fits_fname, data, header, overwrite=True)
 
     def fits_solved(self, fits_fname):
-        data, header = fits.getdata(fits_fname, header=True)
+        _, header = fits.getdata(fits_fname, header=True)
         return header['PLTSOLVD']
 
     def validate_file(self, fname):

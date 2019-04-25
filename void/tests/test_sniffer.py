@@ -169,3 +169,19 @@ class SnifferTests(unittest.TestCase):
         expected = ['void/tests/data/sub/test_in_sub_unflagged.fit']
         self.assertListEqual(expected, value)
         p_writeto.assert_not_called()
+
+    @mock.patch('void.sniffer.fits')
+    def test_check_solve(self, p_fits, *_):
+        instance = sniffer.Sniffer(**self.kwargs)
+        p_fits.getdata.return_value = ('traktor', {'PLTSOLVD': False})
+        value = instance.fits_solved('mock_name')
+        self.assertFalse(value)
+        p_fits.getdata.assert_called_once_with('mock_name', header=True)
+
+    @mock.patch('void.sniffer.fits')
+    def test_check_solve_true(self, p_fits, *_):
+        instance = sniffer.Sniffer(**self.kwargs)
+        p_fits.getdata.return_value = ('traktor', {'PLTSOLVD': True})
+        value = instance.fits_solved('mock_name')
+        self.assertTrue(value)
+        p_fits.getdata.assert_called_once_with('mock_name', header=True)
