@@ -5,14 +5,15 @@ void_writer 0.1
 Inserts data from stdin into the VOID.
 
 Usage:
-    void_writer [--verbosity=V]
+    void_writer [--log=LOG_FILE] [--verbosity=V]
     void_writer -v | --version
     void_writer -h | --help
 
 Options:
+  -l --log=LOG_FILE   Path to log file. Otherwise uses stderr.
+  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
   -h --help           Show this help screen
   -v --version        Show program name and version number
-  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
 
 """
 
@@ -97,7 +98,7 @@ class Writer:
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
-    common.configure_log(arguments['--verbosity'])
+    common.configure_log(arguments['--verbosity'], arguments['--log'])
     log.debug('listening')
 
     with Writer() as writer:

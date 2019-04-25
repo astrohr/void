@@ -16,7 +16,7 @@ LOG_FORMAT = (
 log = logging.getLogger(__name__)
 
 
-def configure_log(verbosity):
+def configure_log(verbosity, log_file=None):
     levels = {
         '0': logging.CRITICAL,
         '1': logging.ERROR,
@@ -26,7 +26,8 @@ def configure_log(verbosity):
     }
     if verbosity not in levels.keys():
         raise docopt.DocoptExit('--verbosity not one of 0, 1, 2, 3, 4')
-    logging.basicConfig(level=levels[verbosity], format=LOG_FORMAT)
+    logging.basicConfig(
+        level=levels[verbosity], format=LOG_FORMAT, filename=log_file)
 
 
 class DataBase:

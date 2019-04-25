@@ -6,15 +6,24 @@ Outputs paths of images from VOID which cross the ephemerides
  given by stdin.
 
 Usage:
-    void_selector --mpc [--verbosity=V]
-    void_selector -r RA -d DE -t T -i DT [--verbosity=V]
+    void_selector --mpc [--log=LOG_FILE] [--verbosity=V]
+    void_selector -r RA -d DE -t T -i DT [--log=LOG_FILE] [--verbosity=V]
     void_selector -v | --version
     void_selector -h | --help
 
 Options:
+  -m --mps            Accept ephemerides from MPC CP on stdin.
+  -r --ra=RA          RA coordinate, in HMS format ("12h31m42s" or \
+"12 31 42" or similar)
+  -d --de=DE          DEC coordinate, in DMS format ("-10:03:44" or \
+"-10 03 44" or similar)
+  -t --time=TIME      Time of the exposure, in ISO format \
+("2019-04-24T14:15:16")
+  -i --interval=IVAL  Interval of time in which to search.
+  -l --log=LOG_FILE   Path to log file. Otherwise uses stderr.
+  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
   -h --help           Show this help screen
   -v --version        Show program name and version number
-  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
 
 """
 import logging
@@ -102,7 +111,7 @@ def parse_time(time_isot):
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
-    common.configure_log(arguments['--verbosity'])
+    common.configure_log(arguments['--verbosity'], arguments['--log'])
     log.debug('listening')
 
     selector = Selector()

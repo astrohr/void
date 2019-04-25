@@ -5,14 +5,15 @@ void_reducer {VERSION}
 Prints header data from a FITS filenames from stdin.
 
 Usage:
-  void_reducer [--verbosity=V]
+  void_reducer [--log=LOG_FILE] [--verbosity=V]
   void_reducer -v | --version
   void_reducer -h | --help
 
 Options:
+  -l --log=LOG_FILE   Path to log file. Otherwise uses stderr.
+  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
   -h --help           Show this help screen
   -v --version        Show program name and version number
-  -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
 """
 
 import json
@@ -86,7 +87,7 @@ def encode_header_data(data):
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
-    common.configure_log(arguments['--verbosity'])
+    common.configure_log(arguments['--verbosity'], arguments['--log'])
     log.debug('listening')
 
     try:

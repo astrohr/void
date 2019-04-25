@@ -6,7 +6,7 @@ Searches for FITS files without a custom header and outputs their paths.
 
 Usage:
   void_sniffer SEARCH_DIR [--tmin=TIME_MIN] [--tmax=TIME_MAX] \
-[--maxn=N] [--flag=HEADER | --ignore-flag] [--dry-run] [--verbosity=V]
+[--maxn=N] [--flag=HEADER | --ignore-flag] [options]
   void_sniffer -v | --version
   void_sniffer -h | --help
 
@@ -17,6 +17,7 @@ Options:
   -f --flag=HEADER    Name of the header to look for, [default: VOID]
   -s --ignore-flag    Skip header flag check
   -d --dry-run        Skip writing to FITS header.
+  -l --log=LOG_FILE   Path to log file. Otherwise uses stderr.
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
   -h --help           Show this help screen
   -v --version        Show program name and version number
@@ -142,7 +143,7 @@ class Sniffer:
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
-    common.configure_log(arguments['--verbosity'])
+    common.configure_log(arguments['--verbosity'], arguments['--log'])
     log.debug('initialising')
     flag_name = (Sniffer.DISABLED_FLAG if arguments['--ignore-flag']
                  else arguments['--flag'])
