@@ -71,6 +71,8 @@ class Selector:
         ra = parse_degrees(ra)
         dec = parse_degrees(dec)
 
+        log.debug(f'ra: {ra}, dec: {dec}, time: {time_unix}')
+
         return ra, dec, time_unix
 
     def linestr_points_intersection(self, line_points):

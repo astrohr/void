@@ -101,6 +101,7 @@ class Sniffer:
     def get_fits_time(self, fits_fname):
         with fits.open(fits_fname) as hdul:
             time_str = hdul[0].header['DATE-OBS']
+            log.debug(f'time: {time_str}')
             return self.parse_time(time_str)
 
     def flag_file(self, fits_fname):
@@ -111,12 +112,20 @@ class Sniffer:
         header[self.flag_name + '_VS'] = reducer.VERSION
         fits.writeto(fits_fname, data, header, overwrite=True)
 
+    def fits_solved(self, fits_fname):
+        _, header = fits.getdata(fits_fname, header=True)
+        return header['PLTSOLVD']
+
     def validate_file(self, fname):
+        log.info(f'fits: {fname}')
         if not fname.endswith('.fits') and not fname.endswith('.fit'):
             return False
         if self.flag_name and self.check_flag(fname):
             return False
         if not self.filter_fits(fname):
+            return False
+        if not self.fits_solved(fname):
+            log.warning(f'Plate not solved for {fname}!')
             return False
         if self.maxn is not None and self.count >= self.maxn:
             raise StopIteration
@@ -145,8 +154,11 @@ def main():
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
     common.configure_log(arguments['--verbosity'], arguments['--log'])
     log.debug('initialising')
-    flag_name = (Sniffer.DISABLED_FLAG if arguments['--ignore-flag']
-                 else arguments['--flag'])
+    flag_name = (
+        Sniffer.DISABLED_FLAG
+        if arguments['--ignore-flag']
+        else arguments['--flag']
+    )
     sniffer = Sniffer(
         search_dir=arguments['SEARCH_DIR'],
         tmin=arguments['--tmin'],
