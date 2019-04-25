@@ -110,12 +110,19 @@ class Sniffer:
         header[self.flag_name + '_VS'] = reducer.VERSION
         fits.writeto(fits_fname, data, header, overwrite=True)
 
+    def fits_solved(self, fits_fname):
+        data, header = fits.getdata(fits_fname, header=True)
+        return header['PLTSOLVD']
+
     def validate_file(self, fname):
         if not fname.endswith('.fits') and not fname.endswith('.fit'):
             return False
         if self.flag_name and self.check_flag(fname):
             return False
         if not self.filter_fits(fname):
+            return False
+        if not self.fits_solved(fname):
+            log.warning(f'Plate not solved for {fname}!')
             return False
         if self.maxn is not None and self.count >= self.maxn:
             raise StopIteration
