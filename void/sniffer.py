@@ -15,7 +15,7 @@ Options:
   -a --tmax=TIME_MAX  High time threshold
   -n --maxn=N         Stop after outputting N images
   -f --flag=HEADER    Name of the header to look for, [default: VOID]
-  -n --ignore-flag    Skip header flag check
+  -s --ignore-flag    Skip header flag check
   -d --dry-run        Skip writing to FITS header.
   -V --verbosity=V    Logging verbosity, 0 to 4 [default: 2]
   -h --help           Show this help screen
@@ -144,12 +144,14 @@ def main():
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
     common.configure_log(arguments['--verbosity'])
     log.debug('initialising')
+    flag_name = (Sniffer.DISABLED_FLAG if arguments['--ignore-flag']
+                 else arguments['--flag'])
     sniffer = Sniffer(
         search_dir=arguments['SEARCH_DIR'],
         tmin=arguments['--tmin'],
         tmax=arguments['--tmax'],
         maxn=arguments['--maxn'],
-        flag_name=arguments['--flag'],
+        flag_name=flag_name,
         update_flag=not arguments['--dry-run'],
     )
     for fname_i in sniffer.find_fits():
