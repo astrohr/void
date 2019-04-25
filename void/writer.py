@@ -42,7 +42,8 @@ class Writer:
             ON CONFLICT (path)
             DO
                 UPDATE
-                    SET exp = EXCLUDED.exp, observer = EXCLUDED.observer, poly=EXCLUDED.poly
+                    SET exp = EXCLUDED.exp,
+                    observer = EXCLUDED.observer, poly=EXCLUDED.poly
         """
         log.debug(f'exe_str: {self.exe_str}')
 

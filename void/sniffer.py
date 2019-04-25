@@ -153,8 +153,11 @@ def main():
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
     common.configure_log(arguments['--verbosity'])
     log.debug('initialising')
-    flag_name = (Sniffer.DISABLED_FLAG if arguments['--ignore-flag']
-                 else arguments['--flag'])
+    flag_name = (
+        Sniffer.DISABLED_FLAG
+        if arguments['--ignore-flag']
+        else arguments['--flag']
+    )
     sniffer = Sniffer(
         search_dir=arguments['SEARCH_DIR'],
         tmin=arguments['--tmin'],
