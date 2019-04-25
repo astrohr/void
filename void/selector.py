@@ -60,6 +60,8 @@ class Selector:
         ra = float(ra)
         dec = float(dec)
 
+        log.debug(f'ra: {ra}, dec: {dec}, time: {time_unix}')
+
         return ra, dec, time_unix
 
     def linestr_points_intersection(self, line_points):

@@ -76,6 +76,7 @@ class Writer:
         """ Appends a timestamp to each polygon point and closes it. """
         poly.append(poly[0])
         poly = [[*poly[i], date_tstamp] for i in range(len(poly))]
+        log.debug(f'polygon: {poly}')
         return poly
 
     @staticmethod

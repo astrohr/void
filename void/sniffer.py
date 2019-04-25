@@ -100,6 +100,7 @@ class Sniffer:
     def get_fits_time(self, fits_fname):
         with fits.open(fits_fname) as hdul:
             time_str = hdul[0].header['DATE-OBS']
+            log.debug(f'time: {time_str}')
             return self.parse_time(time_str)
 
     def flag_file(self, fits_fname):
@@ -115,6 +116,7 @@ class Sniffer:
         return header['PLTSOLVD']
 
     def validate_file(self, fname):
+        log.info(f'fits: {fname}')
         if not fname.endswith('.fits') and not fname.endswith('.fit'):
             return False
         if self.flag_name and self.check_flag(fname):
