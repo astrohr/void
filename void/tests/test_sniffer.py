@@ -20,6 +20,7 @@ class MainTests(unittest.TestCase):
             '--flag': None,
             '--dry-run': False,
             '--verbosity': 789,
+            '--ignore-flag': False,
         }
         expected_call_kwargs = {
             'search_dir': 'foo',
