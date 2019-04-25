@@ -6,7 +6,8 @@ Outputs paths of images from VOID which cross the ephemerides
  given by stdin.
 
 Usage:
-    void_selector [--verbosity=V]
+    void_selector --mpc [--verbosity=V]
+    void_selector -r RA -d DE -t T -i DT [--verbosity=V]
     void_selector -v | --version
     void_selector -h | --help
 
@@ -19,6 +20,7 @@ Options:
 import logging
 import sys
 import docopt
+from astropy.coordinates import Angle
 from astropy.time import Time
 
 from void import common
@@ -56,9 +58,9 @@ class Selector:
             + ':'.join([hour, minutes, '00.000'])
         )
 
-        time_unix = Time(time_isot, format='isot', scale='utc').unix
-        ra = float(ra)
-        dec = float(dec)
+        time_unix = parse_time(time_isot)
+        ra = parse_degrees(ra)
+        dec = parse_degrees(dec)
 
         return ra, dec, time_unix
 
@@ -81,6 +83,22 @@ class Selector:
         self.db.close()
 
 
+def parse_degrees(degs):
+    return float(Angle(degs, unit='degree').deg)
+
+
+def parse_hours(hours):
+    return float(Angle(hours, unit='hour').hour)
+
+
+def parse_hours_to_deg(hours):
+    return float(Angle(hours, unit='hour').degree)
+
+
+def parse_time(time_isot):
+    return Time(time_isot, format='isot', scale='utc').unix
+
+
 def main():
     name_and_version = __doc__.strip().splitlines()[0]
     arguments = docopt.docopt(__doc__, help=True, version=name_and_version)
@@ -91,12 +109,22 @@ def main():
     line_points = []
 
     try:
-        for line in sys.stdin:
-            if not line:
-                continue
-            ra, dec, time_unix = selector.line_to_point(line)
-            line_points.append([ra, dec, time_unix])
-            log.info(f'processing {line}')
+        if arguments['--mpc']:
+            for line in sys.stdin:
+                if not line:
+                    continue
+                ra, dec, time_unix = selector.line_to_point(line)
+                line_points.append([ra, dec, time_unix])
+                log.info(f'processing {line}')
+
+        else:
+            ra = parse_hours_to_deg(arguments['RA'])
+            de = parse_degrees(arguments['DE'])
+            tm = parse_time(arguments['T'])
+            dt = parse_hours(arguments['DT']) * 3600
+            t0 = tm - dt
+            t1 = tm + dt
+            line_points = [(ra, de, t0), (ra, de, t1)]
 
         paths = selector.linestr_points_intersection(line_points)
         for path in paths:
