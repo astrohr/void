@@ -11,7 +11,9 @@ class LogTests(unittest.TestCase):
     def test_configure_log(self, p_logging):
         common.configure_log('3')
         p_logging.basicConfig.assert_called_once_with(
-            level=p_logging.INFO, format=common.LOG_FORMAT
+            filename=None,
+            level=p_logging.INFO,
+            format=common.LOG_FORMAT,
         )
 
     @mock.patch('void.common.logging')

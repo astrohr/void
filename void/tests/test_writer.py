@@ -105,7 +105,7 @@ class MainTests(unittest.TestCase):
         p_docopt_sys.argv = ['script.py', '-V', '3']
         p_sys.stdin = []
         main()
-        p_common.configure_log.assert_called_once_with('3')
+        p_common.configure_log.assert_called_once_with('3', None)
 
     @mock.patch('void.writer.Writer')
     @mock.patch('void.writer.common')

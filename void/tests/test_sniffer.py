@@ -20,6 +20,7 @@ class MainTests(unittest.TestCase):
             '--flag': None,
             '--dry-run': False,
             '--verbosity': 789,
+            '--log': None,
             '--ignore-flag': False,
         }
         expected_call_kwargs = {
@@ -33,7 +34,7 @@ class MainTests(unittest.TestCase):
         p_docopt.docopt.return_value = mock_args.copy()
         sniffer.main()
         p_sniffer_class.assert_called_once_with(**expected_call_kwargs)
-        p_common.configure_log.assert_called_once_with(789)
+        p_common.configure_log.assert_called_once_with(789, None)
 
     @mock.patch('void.sniffer.common')
     @mock.patch('void.sniffer.docopt')
