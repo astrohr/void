@@ -38,7 +38,11 @@ class Writer:
         self.exe_str = """
             INSERT INTO observations (path, exp, observer, poly)
             VALUES (%s, %s, %s,
-            ST_MakePolygon(ST_GeomFromText(%s)));
+            ST_MakePolygon(ST_GeomFromText(%s)))
+            ON CONFLICT (path)
+            DO
+                UPDATE
+                    SET exp = EXCLUDED.exp, observer = EXCLUDED.observer, poly=EXCLUDED.poly
         """
         log.debug(f'exe_str: {self.exe_str}')
 
@@ -54,7 +58,7 @@ class Writer:
         self.db.exec(
             'CREATE TABLE IF NOT EXISTS observations '
             '(id SERIAL, '
-            'path VARCHAR (500) NOT NULL, '
+            'path VARCHAR (500) NOT NULL UNIQUE, '
             'exp FLOAT NOT NULL, '
             'observer VARCHAR (100), '
             'poly GEOMETRY(POLYGONZ) NOT NULL);'
